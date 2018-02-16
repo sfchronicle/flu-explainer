@@ -1,0 +1,12 @@
+<%= t.include("partials/_head.html") %>
+
+<div class="interactive-chart" id="bad-year-for-the-flu"></div>
+
+<div class="interactive-chart" id="who-gets-the vaccine"></div>
+
+<script>
+  var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;
+</script>
+
+<script src="app.js" async></script>
+<%= t.include("partials/_footer.html") %>
