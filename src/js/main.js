@@ -49,9 +49,15 @@ dataNested.forEach(function(d) {
 
 function hoverChart(targetID) {
 
+  d3.select(targetID).select("svg").remove();
+
   // create SVG container for chart components
-  if (screen.width > 480) {
+  if (screen.width > 1400){
+    var height = 700 - margin.top - margin.bottom;
+    console.log("big desktop")
+  } else if (screen.width >= 340 && screen.width <= 1400){
     var height = 500 - margin.top - margin.bottom;
+    console.log("medium size");
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
     // var width = 340 - margin.left - margin.right;
@@ -222,17 +228,24 @@ hoverChart("#bad-year-for-the-flu");
 
 function animatedBarChart(targetID) {
 
+  d3.select(targetID).selectAll("svg").remove();
+
   // show tooltip
   var bars_tooltip = d3.select("body")
       .append("div")
       .attr("class","bars_tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
-      .style("visibility", "hidden")
+      .style("display", "none")
 
   // create SVG container for chart components
-  if (screen.width > 480) {
+  // create SVG container for chart components
+  if (screen.width > 1400){
+    var height = 700 - margin.top - margin.bottom;
+    console.log("big desktop")
+  } else if (screen.width >= 340 && screen.width <= 1400){
     var height = 500 - margin.top - margin.bottom;
+    console.log("medium size");
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
     // var width = 340 - margin.left - margin.right;
@@ -327,7 +340,7 @@ function animatedBarChart(targetID) {
             <div><b>${formatthousands(d.Bsum)}</b> cases of the B strains</div>
             <div><b>${formatthousands(d.Other)}</b> other strains</div>
           `);
-          bars_tooltip.style("visibility", "visible");
+          bars_tooltip.style("display", "block");
         })
         .on("mousemove", function(d) {
           if (screen.width <= 480) {
@@ -340,7 +353,7 @@ function animatedBarChart(targetID) {
               .style("left",(d3.event.pageX-80)+"px");
           }
         })
-        .on("mouseout", function(){return bars_tooltip.style("visibility", "hidden");});
+        .on("mouseout", function(){return bars_tooltip.style("display", "none");});
   }
 }
 
@@ -348,13 +361,15 @@ animatedBarChart("#evolution-of-strains");
 
 function regularBarChart(targetID) {
 
+  d3.select(targetID).select("svg").remove();
+
   // show tooltip
   var regbars_tooltip = d3.select("body")
       .append("div")
       .attr("class","regularbars_tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
-      .style("visibility", "hidden")
+      .style("display", "none")
 
   // create SVG container for chart components
   // margin.bottom = 140;
@@ -436,7 +451,7 @@ function regularBarChart(targetID) {
             <div><b>${d.Age}</b></div>
             <div><b>${d.Effectiveness}</b>% effective</div>
           `);
-          regbars_tooltip.style("visibility", "visible");
+          regbars_tooltip.style("display", "block");
         })
         .on("mousemove", function(d) {
           if (screen.width <= 480) {
@@ -449,7 +464,7 @@ function regularBarChart(targetID) {
               .style("left",(d3.event.pageX-80)+"px");
           }
         })
-        .on("mouseout", function(){return regbars_tooltip.style("visibility", "hidden");});
+        .on("mouseout", function(){return regbars_tooltip.style("display", "none");});
 }
 
 regularBarChart("#efficacy-by-age");
@@ -458,43 +473,9 @@ var r = [];
 
 var statementsData = ["Overall, <span class='highlight'>50%</span> of Americans get the flu vaccine each year.","That is <span class='highlight'>46%</span> of men and <span class='highlight'>52%</span> of women.","Americans over the age of 65 are significantly more likely to get vaccinated than younger Americans, at <span class='highlight'>76%</span>.","Teenagers (9-17 years old) are the least likely, at <span class='highlight'>35%</span>.","White Americans are more likely to be vaccinated than black or hispanic Americans."];
 
-for ( var i = 0; i < statementsData.length; i++ ) {
-	r.push(statementsData[i]);
-}
+function regularBarChartV2(targetID,data,percent) {
 
-var count = 0;
-function changeText() {
-  if (count == 0) {
-    document.getElementById("statement0").innerHTML = "";
-    document.getElementById("statement1").innerHTML = "";
-    document.getElementById("statement2").innerHTML = "";
-    document.getElementById("statement3").innerHTML = "";
-    document.getElementById("statement4").innerHTML = "";
-  }
-
-  var e = document.getElementById("statement"+count);
-  e.style.opacity = 0;
-
-  var last = +new Date();
-  var tick = function() {
-    e.style.opacity = +e.style.opacity + (new Date() - last) / 1000;
-    last = +new Date();
-
-    if (e.style.opacity < 1) {
-      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
-    }
-  };
-
-  tick();
-
-  e.innerHTML = "<div>"+r[count]+"</div>";
-  count < statementsData.length - 1 ? count++ : count = 0;
-}
-
-changeText();
-setInterval(changeText,3000);
-
-function regularBarChartV2(targetID) {
+  d3.select(targetID).select("svg").remove();
 
   // show tooltip
   var regbars2_tooltip = d3.select("body")
@@ -502,21 +483,29 @@ function regularBarChartV2(targetID) {
       .attr("class","regularbars2_tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
-      .style("visibility", "hidden")
+      .style("display", "none")
 
   // create SVG container for chart components
+  margin.bottom = 180;
   if (screen.width > 480) {
-    var height = 500 - margin.top - margin.bottom;
+    var height = 630 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
     // var width = 340 - margin.left - margin.right;
-    var height = 380 - margin.top - margin.bottom;
+    var height = 500 - margin.top - margin.bottom;
   } else if (screen.width <= 340) {
     console.log("mini iphone")
     var height = 370 - margin.top - margin.bottom;
   }
-  margin.bottom = 180;
-  var width = Math.min(windowWidth,maxWidth) - 10 - margin.left - margin.right;
+  if (percent == 0.63) {
+    margin.right = 10;
+  }
+  if (windowWidth > 1200){
+    maxWidth_new = 1200*percent;
+  } else {
+    maxWidth_new = windowWidth*percent;
+  }
+  var width = maxWidth_new - 10 - margin.left - margin.right;
   var svgBars2 = d3.select(targetID).append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -524,7 +513,7 @@ function regularBarChartV2(targetID) {
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var xBarsReg2 = d3.scaleBand()
-    .domain(efficacyByVaccine.map(function(d) { return d.Name; }))
+    .domain(data.map(function(d) { return d.Name; }))
     .rangeRound([0, width])
     .padding(0.2);
 
@@ -549,6 +538,7 @@ function regularBarChartV2(targetID) {
         .style("text-anchor", "end")
         .text("Vaccine")
 
+  if (percent == 0.63) {
   svgBars2.append("g")
       .call(d3.axisLeft(yBarsReg2))
       .append("text")
@@ -559,10 +549,14 @@ function regularBarChartV2(targetID) {
         .attr("fill","black")
         .style("text-anchor", "end")
         .text("% effectiveness")
+  } else {
+    svgBars2.append("g")
+        .call(d3.axisLeft(yBarsReg2))
+  }
 
     // all strains, summed
     svgBars2.selectAll("bar")
-        .data(efficacyByVaccine)
+        .data(data)
       .enter().append("rect")
         .style("fill", function(d,i){
           if (d.Vaccine == "Influenza") {
@@ -596,7 +590,7 @@ function regularBarChartV2(targetID) {
               <div><b>${d.Effectiveness}</b>% effective</div>
             `);
           }
-          regbars2_tooltip.style("visibility", "visible");
+          regbars2_tooltip.style("display", "block");
         })
         .on("mousemove", function(d) {
           if (screen.width <= 480) {
@@ -609,7 +603,22 @@ function regularBarChartV2(targetID) {
               .style("left",(d3.event.pageX-80)+"px");
           }
         })
-        .on("mouseout", function(){return regbars2_tooltip.style("visibility", "hidden");});
+        .on("mouseout", function(){return regbars2_tooltip.style("display", "none");});
 }
 
-regularBarChartV2("#efficacy-by-vaccine");
+var flu_efficacy = efficacyByVaccine.filter(function(d) { return d.Vaccine == "Influenza" });
+var other_efficacy = efficacyByVaccine.filter(function(d) { return d.Vaccine != "Influenza" });
+
+regularBarChartV2("#efficacy-by-vaccine-influenza",flu_efficacy, 0.63);
+regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
+
+$(window).resize(function () {
+  windowWidth = $(window).width();
+
+  hoverChart("#bad-year-for-the-flu");
+  animatedBarChart("#evolution-of-strains");
+  regularBarChart("#efficacy-by-age");
+  regularBarChartV2("#efficacy-by-vaccine-influenza",flu_efficacy, 0.63);
+  regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
+
+});
