@@ -7,10 +7,106 @@ path {
   fill: none;
 }
 
+@ah3: #756bb1;
+@ah1n1: #c7e9c0;
+@bstrains: #a1d99b;
+@other: #74c476;
+
 .interactive-chart {
-  padding: 50px 0;
+  padding: 0 0 50px 0;
+}
+
+.interactive-hed {
+  padding-top: 50px;
+  font-family: @bold-graphics;
+}
+.interactive-deck {
+  font-family: @med-graphics;
+  font-size: 16px;
+  line-height: 1.4;
+  padding-top: 10px;
+  &.padded {
+    padding-bottom: 20px;
+  }
+}
+
+.interactive-hed, .interactive-deck {
+  max-width: 800px;
+  text-align: center;
+  margin: auto;
 }
 
 .line-hover {
   stroke-width: 5 !important;
+}
+
+.bars_tooltip, .regularbars_tooltip {
+  position: absolute;
+  font-size: 14px;
+  font-family: @block-graphics;
+  padding: 10px;
+  border-radius: 3px;
+  background: lighten(@light-gray,20%);
+  border: 1px @dark-gray solid;
+  &:empty {
+    display: none;
+  }
+  @media @mobile {
+    font-size: 12px;
+  }
+}
+
+.legend-container {
+  max-width: 1000px;
+  .display-flex;
+  .flex-wrap(wrap);
+  justify-content: center;
+  padding: 20px 0;
+  font-size: 12px;
+  font-family: @block-graphics;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  .element {
+    display: inline-block;
+    .flex(0 0 20%);
+    &.bold {
+      font-size: 15px;
+      font-family: @med-graphics;
+    }
+    @media @mobile {
+      .flex(0 0 20%);
+    }
+  }
+  @media @mobile {
+    margin: 15px auto;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .swath {
+    height: 14px;
+    width: 14px;
+    margin: 4px;
+    border-radius: 2px;
+    &.long {
+      height: 18px;
+    }
+  }
+  .ah3 {background: @ah3}
+  .ah1n1 {background: @ah1n1}
+  .bstrains {background: @bstrains}
+  .other {background: @other}
+  .legend-text {
+    text-align: left;
+    width: 140px;
+    vertical-align: text-top;
+    &.long {
+      width: 250px;
+      @media @mobile {
+        width: 250px;
+      }
+    }
+    padding-left: 20px;
+    vertical-align: text-top;
+  }
 }

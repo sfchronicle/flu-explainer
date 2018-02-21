@@ -1,15 +1,46 @@
 <%= t.include("partials/_head.html") %>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/1.12.1/d3-annotation.min.js"></script>
 
+
+<div class="interactive-hed">It's a bad year for the flu</div>
+<div class="interactive-deck">See how the current flu season compares to those in years past. The year of the H1N1 scare is the only one that is comparable, and that peaked at an usual time.</div>
 <div class="interactive-chart" id="bad-year-for-the-flu"></div>
 
+
+<div class="interactive-hed">The flu vaccine is less effective than other vaccines</div>
+<div class="interactive-deck">Unlike many other vaccines, people need to get the flu vaccine every year to protect against influenza.</div>
+<div class="interactive-chart" id="flu-vaccine-vs-others"></div>
+
+
+
+<div class="interactive-hed">Who gets the flu vaccine?</div>
+<div class="interactive-deck"></div>
 <div class="interactive-chart" id="who-gets-the-vaccine"></div>
 
+
+
+<div class="interactive-hed">This year has been dominated by an A (H3) strain</div>
+<div class="interactive-deck">However, as the season has progressed, it has been more and more dominated by B strains, which the flu vaccine guards better against.</div>
+<div class="legend-container">
+  <div class="element"><div class="swath ah3"><div class="legend-text">A (H3) strain</div></div></div>
+  <div class="element"><div class="swath ah1n1"><div class="legend-text">A (2009 H1N1) strain</div></div></div>
+  <div class="element"><div class="swath bstrains"><div class="legend-text">B strains</div></div></div>
+  <div class="element"><div class="swath other"><div class="legend-text">Other strains</div></div></div>
+</div>
 <div class="interactive-chart" id="evolution-of-strains"></div>
+
+
+
+<div class="interactive-hed">The flu vaccine is most effective for young children</div>
+<div class="interactive-deck padded">And it is least effective for the elderly. This is primarily for two reasons: (1) older adults have built up some immunity over their lifetime, and (2) younger children are vectors for disease.</div>
+<div class="interactive-chart" id="efficacy-by-age"></div>
+
+
 
 <script>
   var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;
+  var fluStrainsThisYear = <%= JSON.stringify(json.EvolutionOfStrainsThisYear) %>;
+  var efficacyByAge = <%= JSON.stringify(json.EfficacyByAge) %>;
 </script>
 
 <script src="app.js" async></script>
