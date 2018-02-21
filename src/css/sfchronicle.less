@@ -37,17 +37,17 @@ main {
 }
 
 a {
-  color: @gray-blue;
+  color: @redlinks;
   text-decoration: none;
   outline: 0 !important;
   &:hover {
-    color: darken(@gray-blue,10%);
+    color: darken(@redlinks,10%);
   }
   img {
     border: none;
   }
   :hover {
-    color: darken(@gray-blue,10%);
+    color: darken(@redlinks,10%);
   }
 }
 
@@ -85,7 +85,7 @@ p {
 
   a {
     text-decoration: none;
-    color: @gray-blue;
+    color: @redlinks;
   }
 
   @media @mobile {
@@ -211,13 +211,20 @@ text {
     margin-bottom: 40px;
 }
 
+.deck {
+  text-align: center;
+  padding: 10px 0;
+}
+
 .title {
   font-family: @title;
-  font-size: 60px;
+  font-size: 40px;
   padding: 0 10px;
   text-align: center;
   margin: 10px auto 0;
-  max-width: 835px;
+  max-width: 600px;
+  margin-top: 80px;
+  line-height: 1.2;
 
   &.long {
     font-size: 50px;
@@ -245,7 +252,7 @@ text {
 }
 
 .specialhead-top {
-  color: @gray-blue;
+  color: @redlinks;
   font-family: @banner;
   font-size: 18px;
   text-transform: uppercase;
@@ -292,7 +299,7 @@ text {
 
   &.special {
     a {
-      color: @gray-blue;
+      color: @redlinks;
     }
   }
   &.social {
@@ -300,7 +307,7 @@ text {
     margin: 0 6px;
     padding: 4px 2px;
     a {
-      color: @gray-blue;
+      color: @redlinks;
     }
   }
   &.email {

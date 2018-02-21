@@ -47,8 +47,6 @@ dataNested.forEach(function(d) {
     });
 });
 
-console.log(dataNested);
-
 function hoverChart(targetID) {
 
   // create SVG container for chart components
@@ -83,12 +81,11 @@ function hoverChart(targetID) {
   // Define the axes
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x)
-        .ticks(0))
+      .call(d3.axisBottom(x))
       .append("text")
         .attr("class", "label")
         .attr("x", width)
-        .attr("y", 20)
+        .attr("y", 40)
         .attr("fill","black")
         .style("text-anchor", "end")
         .text("Week of flu season")
@@ -222,8 +219,6 @@ function hoverChart(targetID) {
 }
 
 hoverChart("#bad-year-for-the-flu");
-
-console.log(fluStrainsThisYear)
 
 function animatedBarChart(targetID) {
 
@@ -362,12 +357,13 @@ function regularBarChart(targetID) {
       .style("visibility", "hidden")
 
   // create SVG container for chart components
+  // margin.bottom = 140;
   if (screen.width > 480) {
-    var height = 500 - margin.top - margin.bottom;
+    var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
     // var width = 340 - margin.left - margin.right;
-    var height = 380 - margin.top - margin.bottom;
+    var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 340) {
     console.log("mini iphone")
     var height = 370 - margin.top - margin.bottom;
@@ -392,6 +388,11 @@ function regularBarChart(targetID) {
   svgBars.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xBarsReg))
+        // .selectAll("text")
+        //   .style("text-anchor", "end")
+        //   .attr("dx", "-.8em")
+        //   .attr("dy", "-.55em")
+        //   .attr("transform", "rotate(-65)" )
       .append("text")
         .attr("class", "label")
         .attr("x", width)
@@ -432,7 +433,7 @@ function regularBarChart(targetID) {
         })
         .on("mouseover", function(d) {
           regbars_tooltip.html(`
-            <div>Week <b>${d.Age}</b></div>
+            <div><b>${d.Age}</b></div>
             <div><b>${d.Effectiveness}</b>% effective</div>
           `);
           regbars_tooltip.style("visibility", "visible");
@@ -515,7 +516,7 @@ function regularBarChartV2(targetID) {
     var height = 370 - margin.top - margin.bottom;
   }
   margin.bottom = 180;
-  var width = Math.min(windowWidth,700) - 10 - margin.left - margin.right;
+  var width = Math.min(windowWidth,maxWidth) - 10 - margin.left - margin.right;
   var svgBars2 = d3.select(targetID).append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -583,10 +584,18 @@ function regularBarChartV2(targetID) {
           return height - yBarsReg2(+d.Effectiveness);
         })
         .on("mouseover", function(d) {
-          regbars2_tooltip.html(`
-            <div>Week <b>${d.Vaccine}</b></div>
-            <div><b>${d.Effectiveness}</b>% effective</div>
-          `);
+          if (d.Note){
+            regbars2_tooltip.html(`
+              <div><b>${d.Vaccine}</b> Vaccine</div>
+              <div><b>${d.Effectiveness}</b>% effective</div>
+              <div><b>${d.Note}</b></div>
+            `);
+          } else {
+            regbars2_tooltip.html(`
+              <div><b>${d.Vaccine}</b> Vaccine</div>
+              <div><b>${d.Effectiveness}</b>% effective</div>
+            `);
+          }
           regbars2_tooltip.style("visibility", "visible");
         })
         .on("mousemove", function(d) {
