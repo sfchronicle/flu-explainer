@@ -30,6 +30,25 @@ path {
   }
 }
 
+#who-gets-the-vaccine {
+  text-align: center;
+  background: lighten(@light-gray,10%);
+  font-family: @med-graphics;
+  padding: 20px 0 10px 0;
+  max-width: 700px;
+  margin: auto;
+  .highlight {
+    color: @redlinks;
+    font-family: @bold-graphics;
+  }
+  .statement {
+    padding-bottom: 20px;
+    &:empty {
+      padding-bottom: 0;
+    }
+  }
+}
+
 .interactive-hed, .interactive-deck {
   max-width: 800px;
   text-align: center;
@@ -40,7 +59,7 @@ path {
   stroke-width: 5 !important;
 }
 
-.bars_tooltip, .regularbars_tooltip {
+.bars_tooltip, .regularbars_tooltip, .regularbars2_tooltip {
   position: absolute;
   font-size: 14px;
   font-family: @block-graphics;

@@ -35,6 +35,7 @@ if (screen.width <= 480 && screen.width > 340) {
 var maxWidth = 800;
 
 var colorScale = d3.scaleOrdinal(d3.schemeCategory20c);
+var colorScale2 = d3.scaleOrdinal(d3.schemeCategory20b);
 
 var dataNested = d3.nest()
   .key(function(d){ return d["FluYear"]; })
@@ -452,64 +453,154 @@ function regularBarChart(targetID) {
 
 regularBarChart("#efficacy-by-age");
 
+var r = [];
 
-function dotChart(targetID){
+var statementsData = ["Overall, <span class='highlight'>50%</span> of Americans get the flu vaccine each year.","That is <span class='highlight'>46%</span> of men and <span class='highlight'>52%</span> of women.","Americans over the age of 65 are significantly more likely to get vaccinated than younger Americans, at <span class='highlight'>76%</span>.","Teenagers (9-17 years old) are the least likely, at <span class='highlight'>35%</span>.","White Americans are more likely to be vaccinated than black or hispanic Americans."];
 
-  var svg = d3.select("svg"),
-      width = +svg.attr("width"),
-      height = +svg.attr("height");
-
-  var format = d3.format(",d");
-
-  var color = d3.scaleOrdinal(d3.schemeCategory20c);
-
-  var pack = d3.pack()
-      .size([width, height])
-      .padding(1.5);
-
-  d3.csv("flare.csv", function(d) {
-    d.value = +d.value;
-    if (d.value) return d;
-  }, function(error, classes) {
-    if (error) throw error;
-
-    var root = d3.hierarchy({children: classes})
-        .sum(function(d) { return d.value; })
-        .each(function(d) {
-          if (id = d.data.id) {
-            var id, i = id.lastIndexOf(".");
-            d.id = id;
-            d.package = id.slice(0, i);
-            d.class = id.slice(i + 1);
-          }
-        });
-
-    var node = svg.selectAll(".node")
-      .data(pack(root).leaves())
-      .enter().append("g")
-        .attr("class", "node")
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-    node.append("circle")
-        .attr("id", function(d) { return d.id; })
-        .attr("r", function(d) { return d.r; })
-        .style("fill", function(d) { return color(d.package); });
-
-    node.append("clipPath")
-        .attr("id", function(d) { return "clip-" + d.id; })
-      .append("use")
-        .attr("xlink:href", function(d) { return "#" + d.id; });
-
-    node.append("text")
-        .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
-      .selectAll("tspan")
-      .data(function(d) { return d.class.split(/(?=[A-Z][^A-Z])/g); })
-      .enter().append("tspan")
-        .attr("x", 0)
-        .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
-        .text(function(d) { return d; });
-
-    node.append("title")
-        .text(function(d) { return d.id + "\n" + format(d.value); });
-  });
+for ( var i = 0; i < statementsData.length; i++ ) {
+	r.push(statementsData[i]);
 }
+
+var count = 0;
+function changeText() {
+  if (count == 0) {
+    document.getElementById("statement0").innerHTML = "";
+    document.getElementById("statement1").innerHTML = "";
+    document.getElementById("statement2").innerHTML = "";
+    document.getElementById("statement3").innerHTML = "";
+    document.getElementById("statement4").innerHTML = "";
+  }
+
+  var e = document.getElementById("statement"+count);
+  e.style.opacity = 0;
+
+  var last = +new Date();
+  var tick = function() {
+    e.style.opacity = +e.style.opacity + (new Date() - last) / 1000;
+    last = +new Date();
+
+    if (e.style.opacity < 1) {
+      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+    }
+  };
+
+  tick();
+
+  e.innerHTML = "<div>"+r[count]+"</div>";
+  count < statementsData.length - 1 ? count++ : count = 0;
+}
+
+changeText();
+setInterval(changeText,3000);
+
+function regularBarChartV2(targetID) {
+
+  // show tooltip
+  var regbars2_tooltip = d3.select("body")
+      .append("div")
+      .attr("class","regularbars2_tooltip")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden")
+
+  // create SVG container for chart components
+  if (screen.width > 480) {
+    var height = 500 - margin.top - margin.bottom;
+  } else if (screen.width <= 480 && screen.width > 340) {
+    console.log("big phone");
+    // var width = 340 - margin.left - margin.right;
+    var height = 380 - margin.top - margin.bottom;
+  } else if (screen.width <= 340) {
+    console.log("mini iphone")
+    var height = 370 - margin.top - margin.bottom;
+  }
+  margin.bottom = 180;
+  var width = Math.min(windowWidth,700) - 10 - margin.left - margin.right;
+  var svgBars2 = d3.select(targetID).append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var xBarsReg2 = d3.scaleBand()
+    .domain(efficacyByVaccine.map(function(d) { return d.Name; }))
+    .rangeRound([0, width])
+    .padding(0.2);
+
+  var yBarsReg2 = d3.scaleLinear()
+    .domain([0, 100])
+    .range([height, 0]);
+
+  // Define the axes
+  svgBars2.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xBarsReg2))
+        .selectAll("text")
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", "-.55em")
+          .attr("transform", "rotate(-65)" )
+      .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 40)
+        .attr("fill","black")
+        .style("text-anchor", "end")
+        .text("Vaccine")
+
+  svgBars2.append("g")
+      .call(d3.axisLeft(yBarsReg2))
+      .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 20)
+        .attr("x", 0)
+        .attr("fill","black")
+        .style("text-anchor", "end")
+        .text("% effectiveness")
+
+    // all strains, summed
+    svgBars2.selectAll("bar")
+        .data(efficacyByVaccine)
+      .enter().append("rect")
+        .style("fill", function(d,i){
+          if (d.Vaccine == "Influenza") {
+            return "#fdae6b";
+          } else {
+            console.log(i);
+            var index = i-20;
+            return colorScale2(i);
+          }
+        })
+        .attr("x", function(d) {
+          return xBarsReg2(d.Name);
+        })
+        .attr("width", xBarsReg2.bandwidth())
+        .attr("y", function(d) {
+          return yBarsReg2(+d.Effectiveness);
+        })
+        .attr("height", function(d) {
+          return height - yBarsReg2(+d.Effectiveness);
+        })
+        .on("mouseover", function(d) {
+          regbars2_tooltip.html(`
+            <div>Week <b>${d.Vaccine}</b></div>
+            <div><b>${d.Effectiveness}</b>% effective</div>
+          `);
+          regbars2_tooltip.style("visibility", "visible");
+        })
+        .on("mousemove", function(d) {
+          if (screen.width <= 480) {
+            return regbars2_tooltip
+              .style("top", (d3.event.pageY+20)+"px")
+              .style("left",d3.event.pageX/2+20+"px");
+          } else {
+            return regbars2_tooltip
+              .style("top", (d3.event.pageY+20)+"px")
+              .style("left",(d3.event.pageX-80)+"px");
+          }
+        })
+        .on("mouseout", function(){return regbars2_tooltip.style("visibility", "hidden");});
+}
+
+regularBarChartV2("#efficacy-by-vaccine");

@@ -8,14 +8,16 @@
 
 
 <div class="interactive-hed">The flu vaccine is less effective than other vaccines</div>
-<div class="interactive-deck">Unlike many other vaccines, people need to get the flu vaccine every year to protect against influenza.</div>
-<div class="interactive-chart" id="flu-vaccine-vs-others"></div>
+<div class="interactive-deck padded">Unlike many other vaccines, people need to get the flu vaccine every year to protect against influenza and it is less effective. We should define "effective" here.</div>
+<div class="interactive-chart" id="efficacy-by-vaccine"></div>
 
 
 
-<div class="interactive-hed">Who gets the flu vaccine?</div>
-<div class="interactive-deck"></div>
-<div class="interactive-chart" id="who-gets-the-vaccine"></div>
+<div class="interactive-chart" id="who-gets-the-vaccine">
+  <% for (var idx = 0; idx < 5; idx++){ %>
+    <div id="statement<%=idx%>" class="statement"></div>
+  <% } %>
+</div>
 
 
 
@@ -41,6 +43,7 @@
   var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;
   var fluStrainsThisYear = <%= JSON.stringify(json.EvolutionOfStrainsThisYear) %>;
   var efficacyByAge = <%= JSON.stringify(json.EfficacyByAge) %>;
+  var efficacyByVaccine = <%= JSON.stringify(json.FluVaccineVsOtherVaccines) %>;
 </script>
 
 <script src="app.js" async></script>
