@@ -1,8 +1,12 @@
 <%= t.include("partials/_head.html") %>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/1.12.1/d3-annotation.min.js"></script>
+
 <div class="interactive-chart" id="bad-year-for-the-flu"></div>
 
-<div class="interactive-chart" id="who-gets-the vaccine"></div>
+<div class="interactive-chart" id="who-gets-the-vaccine"></div>
+
+<div class="interactive-chart" id="evolution-of-strains"></div>
 
 <script>
   var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;

@@ -1,5 +1,6 @@
 require("./lib/social"); //Do not delete
 var d3 = require("d3");
+// require("d3-svg-annotation");
 
 console.log(d3);
 
@@ -98,11 +99,11 @@ function hoverChart(targetID) {
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x)
-        .ticks(5))
+        .ticks(0))
       .append("text")
         .attr("class", "label")
         .attr("x", width)
-        .attr("y", 40)
+        .attr("y", 20)
         .attr("fill","black")
         .style("text-anchor", "end")
         .text("Week of flu season")
@@ -112,11 +113,11 @@ function hoverChart(targetID) {
         .append("text")
           .attr("class", "label")
           .attr("transform", "rotate(-90)")
-          .attr("y", 20)
+          .attr("y", -35)
           .attr("x", 0)
           .attr("fill","black")
           .style("text-anchor", "end")
-          .text("Weekly flu rate")
+          .text("Percent of doctor visits for ifluenza-like illness")
 
     var voronoi = d3.voronoi()
         .x(function(d) {
@@ -144,11 +145,26 @@ function hoverChart(targetID) {
         .attr("class", class_list)
         .style("stroke", function(){
           var substr = d.key.substring(0,4);
-          console.log(substr);
-          console.log(colorScale(+substr));
-          return colorScale(+substr);
-        })//color_by_year(d.key))//color_by_gender(d.values[0].gender))
-        .style("stroke-width",2)
+          if (substr == 2017){
+            return "#EC1C24";
+          } else {
+            return colorScale(+substr);
+          }
+        })
+        .style("stroke-width",function(){
+          if (d.key.substring(0,4) == 2017){
+            return 5;
+          } else {
+            return 2;
+          }
+        })
+        .style("opacity",function(){
+          if (d.key.substring(0,4) == 2017){
+            return 1;
+          } else {
+            return 0.6;
+          }
+        })
         .attr("d", line(d.values));//lineAllStrava(d.values));
     });
 
@@ -173,7 +189,7 @@ function hoverChart(targetID) {
         .attr("r", 3.5);
 
     focus.append("text")
-        .attr("y", -10);
+        .attr("y", 15);
 
     var voronoiGroup = svg.append("g")
       .attr("class", "voronoi");
@@ -186,16 +202,38 @@ function hoverChart(targetID) {
         .on("mouseout", mouseout);
 
     function mouseover(d) {
-      console.log(d.data["FluYear"]);
       d3.select(".id"+d.data["FluYear"]).classed("line-hover", true);
       focus.attr("transform", "translate(" + x(d.data["ConsecWeek"]) + "," + y(d.data["PercentVisits"]) + ")");
+      focus.select("text").text(function(){ return d.data["FluYear"]+", week "+d.data["ConsecWeek"]+": "+Math.round(d.data["PercentVisits"]*10)/10+ "%" });
     }
 
     function mouseout(d) {
       d3.select(".id"+d.data["FluYear"]).classed("line-hover", false);
       focus.attr("transform", "translate(-100,-100)");
+      focus.select("text").text("");
     }
 
+    svg.append("text")
+      .attr("x", function(d) {
+        return x(3);
+      })
+      .attr("y", function(d) {
+        return y(7.9);
+      })
+      .attr("text-anchor", "start")
+      .style("font-size", "13px")
+      .text("H1N1 flu of 2009");
+
+    svg.append("text")
+      .attr("x", function(d) {
+        return x(18);
+      })
+      .attr("y", function(d) {
+        return y(7.9);
+      })
+      .attr("text-anchor", "start")
+      .style("font-size", "13px")
+      .text("Current flu season");
 }
 
 hoverChart("#bad-year-for-the-flu");
