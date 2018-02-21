@@ -18,17 +18,17 @@ if (screen.width <= 480 && screen.width > 340) {
   console.log("big phone");
   var margin = {
     top: 20,
-    right: 20,
-    bottom: 35,
+    right: 10,
+    bottom: 40,
     left: 30
   };
 } else if (screen.width <= 340) {
   console.log("mini iphone")
   var margin = {
     top: 20,
-    right: 20,
-    bottom: 35,
-    left: 35
+    right: 10,
+    bottom: 40,
+    left: 30
   };
 }
 
@@ -238,7 +238,9 @@ function animatedBarChart(targetID) {
       .style("z-index", "10")
       .style("display", "none")
 
-  // create SVG container for chart components
+  if (screen.width <= 480) {
+    margin.left = 50;
+  }
   // create SVG container for chart components
   if (screen.width > 1400){
     var height = 700 - margin.top - margin.bottom;
@@ -498,7 +500,15 @@ function regularBarChartV2(targetID,data,percent) {
     var height = 370 - margin.top - margin.bottom;
   }
   if (percent == 0.63) {
-    margin.right = 10;
+    if (screen.width <= 480){
+      margin.right = 0;
+    } else {
+      margin.right = 10;
+    }
+  } else {
+    if (screen.width <= 480){
+      margin.left = 30;
+    }
   }
   if (windowWidth > 1200){
     maxWidth_new = 1200*percent;
@@ -529,7 +539,13 @@ function regularBarChartV2(targetID,data,percent) {
           .style("text-anchor", "end")
           .attr("dx", "-.8em")
           .attr("dy", "-.55em")
-          .attr("transform", "rotate(-65)" )
+          .attr("transform", function(){
+            if (screen.width <= 480){
+              return "rotate(-90)";
+            } else {
+              return "rotate(-65)";
+            }
+          })
       .append("text")
         .attr("class", "label")
         .attr("x", width)
@@ -562,7 +578,6 @@ function regularBarChartV2(targetID,data,percent) {
           if (d.Vaccine == "Influenza") {
             return "#fdae6b";
           } else {
-            console.log(i);
             var index = i-20;
             return colorScale2(i);
           }
