@@ -66,6 +66,10 @@ function hoverChart(targetID) {
     console.log("mini iphone")
     var height = 370 - margin.top - margin.bottom;
   }
+  if (screen.width <= 480){
+    margin.left = 50;
+    margin.right = 30;
+  }
   var width = Math.min(windowWidth,maxWidth) - 10 - margin.left - margin.right;
   console.log(width);
 
@@ -97,15 +101,21 @@ function hoverChart(targetID) {
         .text("Week of flu season")
 
     svg.append("g")
-        .call(d3.axisLeft(y))
-        .append("text")
-          .attr("class", "label")
-          .attr("transform", "rotate(-90)")
-          .attr("y", -35)
-          .attr("x", 0)
-          .attr("fill","black")
-          .style("text-anchor", "end")
-          .text("Percent of doctor visits for ifluenza-like illness")
+      .call(d3.axisLeft(y))
+      .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", function(){
+          if (screen.width <= 480){
+            return -30;
+          } else {
+            return -35;
+          }
+        })
+        .attr("x", 0)
+        .attr("fill","black")
+        .style("text-anchor", "end")
+        .text("Percent of doctor visits for ifluenza-like illness")
 
     var voronoi = d3.voronoi()
         .x(function(d) {
@@ -160,12 +170,6 @@ function hoverChart(targetID) {
         .attr("transform", "translate(-100,-100)")
         .attr("class", "focus");
 
-    focus.append("circle")
-        .attr("r", 3.5);
-
-    focus.append("text")
-        .attr("y", -10);
-
     var voronoiGroup = svg.append("g")
       .attr("class", "voronoi");
 
@@ -177,7 +181,14 @@ function hoverChart(targetID) {
         .attr("r", 3.5);
 
     focus.append("text")
-        .attr("y", 15);
+        .attr("id","text1")
+        .attr("y", 20)
+        .attr("text-anchor", "middle");
+
+    focus.append("text")
+        .attr("id","text2")
+        .attr("y", 40)
+        .attr("text-anchor", "middle");
 
     var voronoiGroup = svg.append("g")
       .attr("class", "voronoi");
@@ -192,7 +203,8 @@ function hoverChart(targetID) {
     function mouseover(d) {
       d3.select(".id"+d.data["FluYear"]).classed("line-hover", true);
       focus.attr("transform", "translate(" + x(d.data["ConsecWeek"]) + "," + y(d.data["PercentVisits"]) + ")");
-      focus.select("text").text(function(){ return d.data["FluYear"]+", week "+d.data["ConsecWeek"]+": "+Math.round(d.data["PercentVisits"]*10)/10+ "%" });
+      focus.select("#text1").text(function(){ return d.data["FluYear"]});
+      focus.select("#text2").text(function(){ return Math.round(d.data["PercentVisits"]*10)/10+ "%"});
     }
 
     function mouseout(d) {
@@ -203,10 +215,14 @@ function hoverChart(targetID) {
 
     svg.append("text")
       .attr("x", function(d) {
-        return x(3);
+        if (screen.width <= 480){
+          return x(3.2);
+        } else {
+          return x(3);
+        }
       })
       .attr("y", function(d) {
-        return y(7.9);
+        return y(8.1);
       })
       .attr("text-anchor", "start")
       .style("font-size", "13px")
@@ -214,7 +230,11 @@ function hoverChart(targetID) {
 
     svg.append("text")
       .attr("x", function(d) {
-        return x(18);
+        if (screen.width <= 480){
+          return x(18.4);
+        } else {
+          return x(18);
+        }
       })
       .attr("y", function(d) {
         return y(7.8);
@@ -240,6 +260,7 @@ function animatedBarChart(targetID) {
 
   if (screen.width <= 480) {
     margin.left = 50;
+    margin.right = 20;
   }
   // create SVG container for chart components
   if (screen.width > 1400){
@@ -304,8 +325,6 @@ function animatedBarChart(targetID) {
         .data(fluStrainsThisYear)
       .enter().append("rect")
         .style("fill", function(){
-          console.log(ss);
-          console.log(colorScale(ss));
           return colorScale(ss);
         })
         .attr("x", function(d) {
@@ -453,8 +472,6 @@ function regularBarChart(targetID) {
         .data(efficacyByAge)
       .enter().append("rect")
         .style("fill", function(){
-          console.log(colorScale(1))
-          // return colorScale(0.5);
           return "#3182bd";
         })
         .attr("x", function(d) {
@@ -503,7 +520,11 @@ function regularBarChartV2(targetID,data,percent) {
       .style("display", "none")
 
   // create SVG container for chart components
-  margin.bottom = 180;
+  if (screen.width <= 480){
+    margin.bottom = 130;
+  } else {
+    margin.bottom = 180;
+  }
   if (screen.width > 480) {
     var height = 630 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
@@ -644,8 +665,10 @@ regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
 
 function dotChart(targetID){
 
+  d3.select(targetID).select("svg").remove();
+
   if (screen.width <= 480){
-    var widthCircles = Math.min(windowWidth,300) - 10 - margin.left - margin.right;
+    var widthCircles = Math.min(windowWidth*0.8,300) - 10 - margin.left - margin.right;
   } else {
     var widthCircles = Math.min(windowWidth/2,400) - 10 - margin.left - margin.right;
   }
@@ -680,8 +703,6 @@ function dotChart(targetID){
   sentenceData.push("Teenagers (9-17 years old) are the least likely, at <span class='highlight'>35%</span>.")
   sentenceData.push("White Americans are more likely to be vaccinated than black or hispanic Americans.")
   var i = 0;
-
-  console.log(demographicData);
 
   var updateInfo = function(sentence) {
     document.querySelector("#sentence").innerHTML = sentence;
@@ -776,7 +797,155 @@ function dotChart(targetID){
 
 }
 
-dotChart("#who-gets-the-vaccine");
+var initialVar = 0;
+$(window).scroll(function(){
+  if (initialVar == 0){
+    var pos = $(this).scrollTop();
+    var top_pos = $("#sentence").offset().top-300;
+    if (pos > top_pos){
+      dotChart("#who-gets-the-vaccine");
+      initialVar = 1;
+    }
+  }
+});
+
+function groupedBars(targetID){
+  d3.select(targetID).selectAll("svg").remove();
+
+  // show tooltip
+  var groupedbars_tooltip = d3.select("body")
+      .append("div")
+      .attr("class","groupedbars_tooltip")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("display", "none")
+
+  // create SVG container for chart components
+  margin.bottom = 50;
+  if (screen.width > 1400){
+    var height = 700 - margin.top - margin.bottom;
+    console.log("big desktop")
+  } else if (screen.width >= 340 && screen.width <= 1400){
+    var height = 500 - margin.top - margin.bottom;
+    console.log("medium size");
+  } else if (screen.width <= 480 && screen.width > 340) {
+    console.log("big phone");
+    // var width = 340 - margin.left - margin.right;
+    var height = 380 - margin.top - margin.bottom;
+  } else if (screen.width <= 340) {
+    console.log("mini iphone")
+    var height = 370 - margin.top - margin.bottom;
+  }
+  margin.left = 50;
+  margin.right = 20;
+  if (screen.width <= 480){
+    margin.bottom = 160;
+  }
+  var width = Math.min(windowWidth,maxWidth) - 10 - margin.left - margin.right;
+  var svgGroupedBars = d3.select(targetID).append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var xGroupedBars = d3.scaleBand()
+    .rangeRound([0, width])
+    .padding(0.1);
+
+  var xGroupedBarsInner = d3.scaleBand()
+    .padding(0.05);
+
+  var yGroupedBars = d3.scaleLinear()
+    .range([height, 0]);
+
+  xGroupedBars.domain(efficacyOther.map(function(d){return d.Averted;}));
+
+  xGroupedBarsInner.domain(efficacyOther.map(function(d){return d.Age;})).rangeRound([0, xGroupedBars.bandwidth()]);
+  yGroupedBars.domain([0,d3.max(efficacyOther,function(d){return d.Count/1000000;})]);
+
+  // Define the axes
+  if (screen.width <= 480){
+    svgGroupedBars.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xGroupedBars))
+          .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)" )
+        .append("text")
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", 40)
+          .attr("fill","black")
+          .style("text-anchor", "end")
+  } else {
+    svgGroupedBars.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xGroupedBars))
+        .append("text")
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", 40)
+          .attr("fill","black")
+          .style("text-anchor", "end")
+  }
+
+  svgGroupedBars.append("g")
+      .call(d3.axisLeft(yGroupedBars))
+      .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 20)
+        .attr("x", 0)
+        .attr("fill","black")
+        .style("text-anchor", "end")
+        .text("Number of cases (M)")
+
+  svgGroupedBars.selectAll(".bar")
+      .data(efficacyOther)
+      .enter().append("rect")
+      .attr("x", function(d,i) {return (xGroupedBars(d.Averted)+xGroupedBarsInner(d.Age)); })
+      .attr("y", function(d) {
+        if (d.Count < 5000){
+          return yGroupedBars(d.Count/1000000+0.01);
+        } else {
+          return yGroupedBars(d.Count/1000000);
+        }
+      })
+      .attr("width",xGroupedBarsInner.bandwidth())
+      .attr("height", function(d) {
+        if (d.Count < 5000){
+          return height - yGroupedBars(d.Count/1000000+0.01);
+        } else {
+          return height - yGroupedBars(d.Count/1000000);
+        }
+      })
+      .attr("fill", function(d,i) {
+        return colorScale(d.ColorIdx);
+      })
+      .on("mouseover", function(d) {
+        groupedbars_tooltip.html(`
+          <div><b>Age: ${d.Age}</b></div>
+          <div><b>${formatthousands(d.Count)} ${d.Averted.toLowerCase()}</b></div>
+        `);
+        groupedbars_tooltip.style("display", "block");
+      })
+      .on("mousemove", function(d) {
+        if (screen.width <= 480) {
+          return groupedbars_tooltip
+            .style("top", (d3.event.pageY+20)+"px")
+            .style("left",d3.event.pageX/2+20+"px");
+        } else {
+          return groupedbars_tooltip
+            .style("top", (d3.event.pageY+20)+"px")
+            .style("left",(d3.event.pageX-80)+"px");
+        }
+      })
+      .on("mouseout", function(){return groupedbars_tooltip.style("display", "none");});
+}
+
+groupedBars("#other-efficacy");
 
 $(window).resize(function () {
   windowWidth = $(window).width();
@@ -786,5 +955,7 @@ $(window).resize(function () {
   regularBarChart("#efficacy-by-age");
   regularBarChartV2("#efficacy-by-vaccine-influenza",flu_efficacy, 0.63);
   regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
+  dotChart("#who-gets-the-vaccine");
+  groupedBars("#other-efficacy");
 
 });

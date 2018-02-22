@@ -12,8 +12,17 @@ path {
 @bstrains: #a1d99b;
 @other: #74c476;
 
+@age6mo: #a1d99b;
+@age5yr: #c7e9c0;
+@age18yr: #756bb1;
+@age50yr: #9e9ac8;
+@age65yr: #bcbddc;
+
 .interactive-chart {
   padding: 0 0 50px 0;
+  @media @mobile {
+    padding: 0 0 30px 0;
+  }
 }
 
 .interactive-hed {
@@ -52,6 +61,15 @@ path {
   .align-items(center);
   .justify-content(center);
   max-width: 800px;
+  margin: auto;
+  padding-bottom: 0;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  @media @mobile {
+    margin-bottom: 30px;
+    width: 80%;
+  }
+  border: 1px solid @light-gray;
   #sentence, #who-gets-the-vaccine {
     .flex(0 0 50%);
     @media @mobile {
@@ -88,7 +106,7 @@ path {
   stroke-width: 5 !important;
 }
 
-.bars_tooltip, .regularbars_tooltip, .regularbars2_tooltip {
+.bars_tooltip, .regularbars_tooltip, .regularbars2_tooltip, .groupedbars_tooltip {
   position: absolute;
   font-size: 14px;
   font-family: @block-graphics;
@@ -118,13 +136,19 @@ path {
   text-align: center;
   .element {
     display: inline-block;
-    .flex(0 0 20%);
+    .flex(0 0 15%);
     &.bold {
       font-size: 15px;
       font-family: @med-graphics;
     }
     @media @mobile {
       .flex(0 0 40%);
+    }
+    &.short {
+      .flex(0 0 15%);
+      @media @mobile {
+        .flex(0 0 40%);
+      }
     }
   }
   @media @mobile {
@@ -145,6 +169,11 @@ path {
   .ah1n1 {background: @ah1n1}
   .bstrains {background: @bstrains}
   .other {background: @other}
+  .age6mo {background: @age6mo}
+  .age5yr {background: @age5yr}
+  .age18yr {background: @age18yr}
+  .age50yr {background: @age50yr}
+  .age65yr {background: @age65yr}
   .legend-text {
     text-align: left;
     width: 140px;

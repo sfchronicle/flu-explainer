@@ -34,6 +34,15 @@
     </div>
   <% } else if (story.Interactive == "efficacy-by-age") { %>
     <div class="interactive-chart" id="efficacy-by-age"></div>
+  <% } else if (story.Interactive == "other-efficacy") { %>
+    <div class="legend-container">
+      <div class="element short"><div class="swath age6mo"><div class="legend-text">6 months - 4 years</div></div></div>
+      <div class="element short"><div class="swath age5yr"><div class="legend-text">5 - 17 years</div></div></div>
+      <div class="element short"><div class="swath age18yr"><div class="legend-text">18 - 49 years</div></div></div>
+      <div class="element short"><div class="swath age50yr"><div class="legend-text">50 - 64 years</div></div></div>
+      <div class="element short"><div class="swath age65yr"><div class="legend-text">65 and older</div></div></div>
+    </div>
+    <div class="interactive-chart" id="other-efficacy"></div>
   <% } %>
 
 <% }) %>
@@ -43,6 +52,7 @@
   var fluStrainsThisYear = <%= JSON.stringify(json.EvolutionOfStrainsThisYear) %>;
   var efficacyByAge = <%= JSON.stringify(json.EfficacyByAge) %>;
   var efficacyByVaccine = <%= JSON.stringify(json.FluVaccineVsOtherVaccines) %>;
+  var efficacyOther = <%= JSON.stringify(json.OtherEfficacyTransposed) %>;
 </script>
 
 <script src="app.js" async></script>
