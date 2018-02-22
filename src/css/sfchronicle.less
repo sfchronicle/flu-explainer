@@ -214,6 +214,12 @@ text {
 .deck {
   text-align: center;
   padding: 10px 0;
+  @media @mobile {
+    max-width: 300px;
+    margin: auto;
+    font-size: 20px;
+    line-height: 1.2;
+  }
 }
 
 .title {
@@ -226,19 +232,8 @@ text {
   margin-top: 80px;
   line-height: 1.2;
 
-  &.long {
-    font-size: 50px;
-    line-height: 1.2;
-    margin: 20px auto 0;
-    margin-top: 10px;
-    margin-bottom: 25px;
-
-    &.text-width {
-      max-width:800px;
-    }
-    @media @mobile {
-      font-size: 1.8em;
-    }
+  @media @mobile {
+    font-size: 30px;
   }
 }
 

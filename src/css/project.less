@@ -17,8 +17,15 @@ path {
 }
 
 .interactive-hed {
-  padding-top: 50px;
-  font-family: @bold-graphics;
+  padding: 50px 0 30px 0;
+  font-family: @body-bold;
+  font-size: 25px;
+  line-height: 1.4;
+  @media @mobile {
+    width: 80%;
+    margin: auto;
+    padding: 30px 0;
+  }
 }
 .interactive-deck {
   font-family: @med-graphics;
@@ -31,7 +38,7 @@ path {
 }
 
 .double {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: auto;
   text-align: center;
   #efficacy-by-vaccine-influenza, #efficacy-by-vaccine-others {
@@ -39,21 +46,34 @@ path {
   }
 }
 
-#who-gets-the-vaccine {
-  text-align: center;
-  background: lighten(@light-gray,10%);
-  font-family: @med-graphics;
-  padding: 20px 0 10px 0;
-  max-width: 700px;
-  margin: auto;
-  .highlight {
-    color: @redlinks;
-    font-family: @bold-graphics;
+.statement-chart {
+  .display-flex;
+  .flex-wrap(wrap);
+  .align-items(center);
+  .justify-content(center);
+  max-width: 800px;
+  #sentence, #who-gets-the-vaccine {
+    .flex(0 0 50%);
+    @media @mobile {
+      .flex(0 0 80%);
+    }
   }
-  .statement {
-    padding-bottom: 20px;
-    &:empty {
-      padding-bottom: 0;
+  svg {
+    margin: auto;
+  }
+  #sentence {
+    max-width: 350px;
+    text-align: center;
+    margin: auto;
+    font-family: @block-graphics;
+    .highlight {
+      font-family: @bold-graphics;
+      color: @redlinks;
+    }
+    @media @mobile {
+      line-height: 1.2;
+      font-size: 20px;
+      padding: 20px 0;
     }
   }
 }

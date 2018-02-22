@@ -379,10 +379,11 @@ function regularBarChart(targetID) {
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
-    // var width = 340 - margin.left - margin.right;
+    margin.bottom = 120;
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 340) {
     console.log("mini iphone")
+    margin.bottom = 120;
     var height = 370 - margin.top - margin.bottom;
   }
   var width = Math.min(windowWidth,700) - 10 - margin.left - margin.right;
@@ -402,21 +403,39 @@ function regularBarChart(targetID) {
     .range([height, 0]);
 
   // Define the axes
-  svgBars.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xBarsReg))
-        // .selectAll("text")
-        //   .style("text-anchor", "end")
-        //   .attr("dx", "-.8em")
-        //   .attr("dy", "-.55em")
-        //   .attr("transform", "rotate(-65)" )
-      .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", 40)
-        .attr("fill","black")
-        .style("text-anchor", "end")
-        .text("Age")
+  if (screen.width <= 480){
+    svgBars.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xBarsReg))
+          .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)" )
+        .append("text")
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", 40)
+          .attr("fill","black")
+          .style("text-anchor", "end")
+          .text("Age")
+  } else {
+    svgBars.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xBarsReg))
+          // .selectAll("text")
+          //   .style("text-anchor", "end")
+          //   .attr("dx", "-.8em")
+          //   .attr("dy", "-.55em")
+          //   .attr("transform", "rotate(-65)" )
+        .append("text")
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", 40)
+          .attr("fill","black")
+          .style("text-anchor", "end")
+          .text("Age")
+  }
 
   svgBars.append("g")
       .call(d3.axisLeft(yBarsReg))
@@ -471,10 +490,6 @@ function regularBarChart(targetID) {
 
 regularBarChart("#efficacy-by-age");
 
-var r = [];
-
-var statementsData = ["Overall, <span class='highlight'>50%</span> of Americans get the flu vaccine each year.","That is <span class='highlight'>46%</span> of men and <span class='highlight'>52%</span> of women.","Americans over the age of 65 are significantly more likely to get vaccinated than younger Americans, at <span class='highlight'>76%</span>.","Teenagers (9-17 years old) are the least likely, at <span class='highlight'>35%</span>.","White Americans are more likely to be vaccinated than black or hispanic Americans."];
-
 function regularBarChartV2(targetID,data,percent) {
 
   d3.select(targetID).select("svg").remove();
@@ -510,8 +525,8 @@ function regularBarChartV2(targetID,data,percent) {
       margin.left = 30;
     }
   }
-  if (windowWidth > 1200){
-    maxWidth_new = 1200*percent;
+  if (windowWidth > 1000){
+    maxWidth_new = 1000*percent;
   } else {
     maxWidth_new = windowWidth*percent;
   }
@@ -626,6 +641,142 @@ var other_efficacy = efficacyByVaccine.filter(function(d) { return d.Vaccine != 
 
 regularBarChartV2("#efficacy-by-vaccine-influenza",flu_efficacy, 0.63);
 regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
+
+function dotChart(targetID){
+
+  if (screen.width <= 480){
+    var widthCircles = Math.min(windowWidth,300) - 10 - margin.left - margin.right;
+  } else {
+    var widthCircles = Math.min(windowWidth/2,400) - 10 - margin.left - margin.right;
+  }
+  var heightCircles = widthCircles;
+  margin.bottom = 0;
+  margin.top = 0;
+  margin.right = 10;
+  margin.left = 10;
+
+  var svgDots = d3.select(targetID).append("svg")
+      .attr("width", widthCircles + margin.left + margin.right)
+      .attr("height", heightCircles + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var pack = d3.pack()
+      .size([widthCircles, heightCircles])
+      .padding(1.5);
+
+  // var demographicData = {[50,50],[46,52],[49,35,41,59,76],[52,40,41,50]};
+  var demographicData = [];
+  demographicData.push([{name:"Vaccinated",size: 50},{name:"Unvaccinated",size: 50}]);
+  demographicData.push([{name:"Men",size: 46},{name:"Women",size: 52}]);
+  demographicData.push([{name:"6 months - 8 years",size: 49},{name:"9 - 17 years",size: 35},{name:"18 - 49 years",size: 41},{name:"50 - 64 years",size: 59},{name:"Over 65 years",size: 76}]);
+  demographicData.push([{name:"6 months - 8 years",size: 49},{name:"9 - 17 years",size: 35},{name:"18 - 49 years",size: 41},{name:"50 - 64 years",size: 59},{name:"Over 65 years",size: 76}]);
+  demographicData.push([{name:"White",size: 52},{name:"Black",size: 40},{name:"Hispanic",size:41},{name:"Other",size:50}]);
+
+  var sentenceData = [];
+  sentenceData.push("Overall, <span class='highlight'>50%</span> of Americans get the flu vaccine each year.");
+  sentenceData.push("That is <span class='highlight'>46%</span> of men and <span class='highlight'>52%</span> of women.");
+  sentenceData.push("Americans over the age of 65 are significantly more likely to get vaccinated than younger Americans, at <span class='highlight'>76%</span>.");
+  sentenceData.push("Teenagers (9-17 years old) are the least likely, at <span class='highlight'>35%</span>.")
+  sentenceData.push("White Americans are more likely to be vaccinated than black or hispanic Americans.")
+  var i = 0;
+
+  console.log(demographicData);
+
+  var updateInfo = function(sentence) {
+    document.querySelector("#sentence").innerHTML = sentence;
+  };
+
+  var loop = null;
+  var tick = function() {
+    drawBubbles(demographicData[i]);
+    updateInfo(sentenceData[i]);
+    i = (i + 1) % demographicData.length;
+    loop = setTimeout(tick, i == 0 ? 8000 : 4000);
+  };
+
+  tick();
+
+  function drawBubbles(data,dataIDX){
+
+    // transition
+    var t = d3.transition()
+        .duration(750);
+
+    // hierarchy
+    var h = d3.hierarchy({children: data})
+        .sum(function(d) { return d.size; })
+
+    //JOIN
+    var circle = svgDots.selectAll("circle")
+        .data(pack(h).leaves(), function(d){
+          return d.data.name;
+        });
+
+    var text = svgDots.selectAll("text")
+        .data(pack(h).leaves(), function(d){
+          return d.data.name;
+        });
+
+    //EXIT
+    circle.exit()
+        .style("fill", colorScale(i))
+      .transition(t)
+        .attr("r", 1e-6)
+        .remove();
+
+    text.exit()
+      .transition(t)
+        .attr("opacity", 1e-6)
+        .remove();
+
+    //UPDATE
+    circle
+      .transition(t)
+        .style("fill", colorScale(i))
+        .attr("r", function(d){ return d.r })
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+
+    text
+      .transition(t)
+        .attr("x", function(d){ return d.x; })
+        .attr("y", function(d){ return d.y; });
+
+    //ENTER
+    circle.enter().append("circle")
+        .attr("r", 1e-6)
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+        .style("fill", "#fff")
+      .transition(t)
+        .style("fill", colorScale(i))
+        .attr("r", function(d){ return d.r });
+
+    text.enter().append("text")
+        .attr("opacity", 1e-6)
+        // .attr("fill","white")
+        .attr("x", function(d){ return d.x })
+        .attr("y", function(d){ return d.y; })
+        .attr("text-anchor", "middle")
+        .text(function(d){
+          if (i == 2){
+            if (d.data.name == "Over 65 years" || d.data.name == "9 - 17 years") {
+              return d.data.name+", "+d.data.size+"%";
+            } else {
+              return "";
+            }
+          } else {
+            return d.data.name+", "+d.data.size+"%";
+          }
+        })
+      .transition(t)
+        .attr("opacity", 1);
+  }
+
+}
+
+dotChart("#who-gets-the-vaccine");
 
 $(window).resize(function () {
   windowWidth = $(window).width();

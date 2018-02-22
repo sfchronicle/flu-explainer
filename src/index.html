@@ -5,46 +5,38 @@
 <div class="author">By <a href="mailto:eallday@sfchronicle.com">Erin Allday</a> and <a href="mailto:eoneill@sfchronicle.com">Emma O'Neill</a></div>
 <div class="date"><%=json.flu_season.Date%></div>
 
+<% json.flu_season.story.forEach(function(story){ %>
 
-<div class="interactive-hed">It's a bad year for the flu</div>
-<div class="interactive-deck">See how the current flu season compares to those in years past. The year of the H1N1 scare is the only one that is comparable, and that peaked at an usual time.</div>
-<div class="interactive-chart" id="bad-year-for-the-flu"></div>
+  <div class="interactive-hed"><%=story.Headline%></div>
+  <% story.text.forEach(function(d,didx){ %>
+    <p><%=d.value %></p>
+  <% }); %>
 
-
-<div class="interactive-hed">The flu vaccine is less effective than other vaccines</div>
-<div class="interactive-deck padded">Unlike many other vaccines, people need to get the flu vaccine every year to protect against influenza and it is less effective. We should define "effective" here.</div>
-<div class="interactive-chart double">
-  <div id="efficacy-by-vaccine-influenza"></div>
-  <div id="efficacy-by-vaccine-others"></div>
-</div>
-
-
-
-<div class="interactive-chart" id="who-gets-the-vaccine">
-  <% for (var idx = 0; idx < 5; idx++){ %>
-    <div id="statement<%=idx%>" class="statement"></div>
+  <% if (story.Interactive == "bad-year-for-the-flu") { %>
+    <div class="interactive-chart" id="bad-year-for-the-flu"></div>
+  <% } else if (story.Interactive == "efficacy-by-vaccine") { %>
+    <div class="interactive-chart double">
+      <div id="efficacy-by-vaccine-influenza"></div>
+      <div id="efficacy-by-vaccine-others"></div>
+    </div>
+  <% } else if (story.Interactive == "evolution-of-strains") { %>
+    <div class="legend-container">
+      <div class="element"><div class="swath ah3"><div class="legend-text">A (H3) strain</div></div></div>
+      <div class="element"><div class="swath ah1n1"><div class="legend-text">A (2009 H1N1) strain</div></div></div>
+      <div class="element"><div class="swath bstrains"><div class="legend-text">B strains</div></div></div>
+      <div class="element"><div class="swath other"><div class="legend-text">Other strains</div></div></div>
+    </div>
+    <div class="interactive-chart" id="evolution-of-strains"></div>
+  <% } else if (story.Interactive == "who-gets-the-vaccine") { %>
+    <div class="interactive-chart statement-chart">
+      <div id="sentence"></div>
+      <div id="who-gets-the-vaccine"></div>
+    </div>
+  <% } else if (story.Interactive == "efficacy-by-age") { %>
+    <div class="interactive-chart" id="efficacy-by-age"></div>
   <% } %>
-</div>
 
-
-
-<div class="interactive-hed">This year has been dominated by an A (H3) strain</div>
-<div class="interactive-deck">However, as the season has progressed, it has been more and more dominated by B strains, which the flu vaccine guards better against.</div>
-<div class="legend-container">
-  <div class="element"><div class="swath ah3"><div class="legend-text">A (H3) strain</div></div></div>
-  <div class="element"><div class="swath ah1n1"><div class="legend-text">A (2009 H1N1) strain</div></div></div>
-  <div class="element"><div class="swath bstrains"><div class="legend-text">B strains</div></div></div>
-  <div class="element"><div class="swath other"><div class="legend-text">Other strains</div></div></div>
-</div>
-<div class="interactive-chart" id="evolution-of-strains"></div>
-
-
-
-<div class="interactive-hed">The flu vaccine is most effective for young children</div>
-<div class="interactive-deck padded">And it is least effective for the elderly. This is primarily for two reasons: (1) older adults have built up some immunity over their lifetime, and (2) younger children are vectors for disease.</div>
-<div class="interactive-chart" id="efficacy-by-age"></div>
-
-
+<% }) %>
 
 <script>
   var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;
