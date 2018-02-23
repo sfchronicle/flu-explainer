@@ -257,6 +257,7 @@ hoverChart("#bad-year-for-the-flu");
 function animatedBarChart(targetID) {
 
   d3.select(targetID).selectAll("svg").remove();
+  var successiveBars = ["AH3","AH1N1","Bsum","Other"];
 
   // show tooltip
   var bars_tooltip = d3.select("body")
@@ -293,13 +294,17 @@ function animatedBarChart(targetID) {
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var xBars = d3.scaleBand()
-    .domain(d3.range(19))
+    .domain(d3.range(20))
     .rangeRound([0, width])
     .padding(0.2);
 
   var yBars = d3.scaleLinear()
     .domain([0, 5000])
     .range([height, 0]);
+
+  var z = d3.scaleBand()
+    .domain(d3.range(4))
+    .rangeRound([0, xBars.bandwidth()]);
 
   // Define the axes
   svgBars.append("g")
@@ -326,14 +331,15 @@ function animatedBarChart(targetID) {
         .style("text-anchor", "end")
         .text("Flu strains")
 
-  var successiveBars = ["AH3","AH1N1","Bsum","Other"];
-
   for (var ss=0; ss<successiveBars.length; ss++){
 
     // all strains, summed
     svgBars.selectAll("bar")
         .data(fluStrainsThisYear)
       .enter().append("rect")
+        .attr("id",function(d){
+          return "bar"+ss+"week"+d.WeekNum;
+        })
         .style("fill", function(){
           return colorScale(ss);
         })
@@ -385,6 +391,98 @@ function animatedBarChart(targetID) {
           }
         })
         .on("mouseout", function(){return bars_tooltip.style("display", "none");});
+  }
+
+  // var timeout = setTimeout(function() {
+  //   transitionGrouped();
+  // }, 2000);
+
+  var toggle = "stacked";
+  document.getElementById("click-to-see-strains").addEventListener("click", function(e) {
+    if (toggle == "stacked"){
+      transitionGrouped();
+      toggle = "grouped";
+    } else {
+      transitionStacked();
+      toggle = "stacked";
+    }
+  });
+
+  function transitionGrouped() {
+
+    var rectBars = svgBars.selectAll("rect");
+
+    rectBars.transition()
+      .duration(500)
+      .delay(function(d, i) { return i * 10; })
+      .attr("x", function(d,i) {
+        var idnum = this.id.split("bar")[1][0];
+        return xBars(d.WeekNum)+z(idnum);
+      })
+      .attr("width", function(){
+        return xBars.bandwidth() / 4;
+      })
+      .transition()
+      .attr("y", function(d) {
+        var idnum = this.id.split("bar")[1][0];
+        if (idnum == 3){
+          return yBars(d.AH3);
+        } else if (idnum == 2){
+          return yBars(d.AH1N1);
+        } else if (idnum == 1){
+          return yBars(d.Bsum);
+        } else {
+          return yBars(d.Other);
+        }
+      })
+      .attr("height", function(d) {
+        var idnum = this.id.split("bar")[1][0];
+        if (idnum == 3){
+          return height - yBars(d.AH3);
+        } else if (idnum == 2){
+          return height - yBars(d.AH1N1);
+        } else if (idnum == 1){
+          return height - yBars(d.Bsum);
+        } else {
+          return height - yBars(d.Other);
+        }
+      });
+  }
+
+  function transitionStacked() {
+
+    var rectBars = svgBars.selectAll("rect");
+
+    rectBars.transition()
+        .duration(500)
+        .delay(function(d, i) { return i * 10; })
+        .attr("y", function(d) {
+          var idnum = this.id.split("bar")[1][0];
+          if (idnum == 0){
+            return yBars(+d.Sum);
+          } else if (idnum == 1){
+            return yBars(+d.AH3+d.AH1N1+d.Bsum);
+          } else if (idnum == 2){
+            return yBars(+d.AH3+d.AH1N1);
+          } else {
+            return yBars(+d.AH3);
+          }
+        })
+        .attr("height", function(d) {
+          var idnum = this.id.split("bar")[1][0];
+          if (idnum == 0){
+            return height - yBars(+d.Sum);
+          } else if (idnum == 1){
+            return height - yBars(+d.AH3+d.AH1N1+d.Bsum);
+          } else if (idnum == 2){
+            return height - yBars(+d.AH3+d.AH1N1);
+          } else {
+            return height - yBars(+d.AH3);
+          }
+        })
+      .transition()
+        .attr("x", function(d) { return xBars(+d.WeekNum); })
+        .attr("width", xBars.bandwidth());
   }
 }
 
