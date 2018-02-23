@@ -784,7 +784,7 @@ function dotChart(targetID){
   d3.select(targetID).select("svg").remove();
 
   if (screen.width <= 480){
-    var widthCircles = Math.min(windowWidth*0.8,300) - 10 - margin.left - margin.right;
+    var widthCircles = Math.min(windowWidth*0.9,300) - 10 - margin.left - margin.right;
   } else {
     var widthCircles = Math.min(windowWidth/2,400) - 10 - margin.left - margin.right;
   }
@@ -808,15 +808,13 @@ function dotChart(targetID){
   var demographicData = [];
   demographicData.push([{name:"Vaccinated",size: 50},{name:"Unvaccinated",size: 50}]);
   demographicData.push([{name:"Men",size: 46},{name:"Women",size: 52}]);
-  demographicData.push([{name:"6 months - 8 years",size: 49},{name:"9 - 17 years",size: 35},{name:"18 - 49 years",size: 41},{name:"50 - 64 years",size: 59},{name:"Over 65 years",size: 76}]);
-  demographicData.push([{name:"6 months - 8 years",size: 49},{name:"9 - 17 years",size: 35},{name:"18 - 49 years",size: 41},{name:"50 - 64 years",size: 59},{name:"Over 65 years",size: 76}]);
+  demographicData.push([{name:"6 mo.s-8 years",size: 49},{name:"9-17 years",size: 35},{name:"18-49 years",size: 41},{name:"50-64 years",size: 59},{name:"Over 65 years",size: 76}]);
   demographicData.push([{name:"White",size: 52},{name:"Black",size: 40},{name:"Hispanic",size:41},{name:"Other",size:50}]);
 
   var sentenceData = [];
   sentenceData.push("Overall, <span class='highlight'>50%</span> of Americans get the flu vaccine each year.");
   sentenceData.push("That is <span class='highlight'>46%</span> of men and <span class='highlight'>52%</span> of women.");
-  sentenceData.push("Americans over the age of 65 are significantly more likely to get vaccinated than younger Americans, at <span class='highlight'>76%</span>.");
-  sentenceData.push("Teenagers (9-17 years old) are the least likely, at <span class='highlight'>35%</span>.")
+  sentenceData.push("Older Americans are significantly more likely to get vaccinated. Teenagers are the least likely.");
   sentenceData.push("White Americans are more likely to be vaccinated than black or hispanic Americans.")
   var i = 0;
 
@@ -898,18 +896,16 @@ function dotChart(targetID){
         .attr("opacity", 1e-6)
         // .attr("fill","white")
         .attr("x", function(d){ return d.x })
-        .attr("y", function(d){ return d.y; })
+        .attr("y", function(d){
+          if (d.data.name == "9-17 years"){
+            return d.y-15;
+          } else {
+            return d.y;
+          }
+        })
         .attr("text-anchor", "middle")
         .text(function(d){
-          if (i == 2){
-            if (d.data.name == "Over 65 years" || d.data.name == "9 - 17 years") {
-              return d.data.name+", "+d.data.size+"%";
-            } else {
-              return "";
-            }
-          } else {
-            return d.data.name+", "+d.data.size+"%";
-          }
+          return d.data.name+", "+d.data.size+"%";
         })
       .transition(t)
         .attr("opacity", 1);
