@@ -311,7 +311,17 @@ function animatedBarChart(targetID) {
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xBars)
         .ticks(19)
-        .tickFormat(function(d,i){return weeknums[i];}))
+        .tickFormat(function(d,i){
+          if (screen.width <= 480){
+            if (i % 2 == 0){
+              return weeknums[i];
+            } else {
+              return "";
+            }
+          } else {
+            return weeknums[i];
+          }
+        }))
       .append("text")
         .attr("class", "label")
         .attr("x", width)
@@ -392,10 +402,6 @@ function animatedBarChart(targetID) {
         })
         .on("mouseout", function(){return bars_tooltip.style("display", "none");});
   }
-
-  // var timeout = setTimeout(function() {
-  //   transitionGrouped();
-  // }, 2000);
 
   var toggle = "stacked";
   document.getElementById("click-to-see-strains").addEventListener("click", function(e) {
