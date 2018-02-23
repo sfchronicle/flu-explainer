@@ -359,7 +359,7 @@ function animatedBarChart(targetID) {
             <div><b>${formatthousands(d.AH3)}</b> cases of the A (H3) strain</div>
             <div><b>${formatthousands(d.AH1N1)}</b> cases of the A (2009 H1N1) strain</div>
             <div><b>${formatthousands(d.Bsum)}</b> cases of the B strains</div>
-            <div><b>${formatthousands(d.Other)}</b> other strains</div>
+            <div><b>${formatthousands(d.Other)}</b> cases of other strains</div>
           `);
           bars_tooltip.style("display", "block");
         })
@@ -394,6 +394,7 @@ function regularBarChart(targetID) {
 
   // create SVG container for chart components
   // margin.bottom = 140;
+  margin.top = 40;
   if (screen.width > 480) {
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
@@ -712,6 +713,10 @@ function dotChart(targetID){
   var tick = function() {
     drawBubbles(demographicData[i]);
     updateInfo(sentenceData[i]);
+    $(".li").removeClass("active");
+    for (var li_idx=0; li_idx<=i; li_idx++){
+      document.querySelector("#li"+li_idx).classList.add("active");
+    }
     i = (i + 1) % demographicData.length;
     loop = setTimeout(tick, i == 0 ? 8000 : 4000);
   };

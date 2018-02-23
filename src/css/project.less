@@ -25,8 +25,33 @@ path {
   }
 }
 
+.progressbar {
+  max-width: 140px;
+  margin: auto;
+  vertical-align: bottom;
+  bottom: -40px;
+  position: absolute;
+  left: 0; right: 0;
+  li {
+    // display: inline-block;
+    list-style: circle;
+    float: left;
+    width: 20px;
+    height: 20px;
+    color: @light-gray;
+    text-align: center;
+    &.active {
+      list-style: disc;
+    }
+  }
+}
+
+.intro {
+  padding-top: 30px;
+}
+
 .interactive-hed {
-  padding: 50px 0 30px 0;
+  padding: 50px 0 0 0;
   font-family: @body-bold;
   font-size: 25px;
   line-height: 1.4;
@@ -50,6 +75,7 @@ path {
   max-width: 1000px;
   margin: auto;
   text-align: center;
+  padding-top: 20px;
   #efficacy-by-vaccine-influenza, #efficacy-by-vaccine-others {
     display: inline-block;
   }
@@ -70,7 +96,7 @@ path {
     width: 80%;
   }
   border: 1px solid @light-gray;
-  #sentence, #who-gets-the-vaccine {
+  .sentence-container, #who-gets-the-vaccine {
     .flex(0 0 50%);
     @media @mobile {
       .flex(0 0 80%);
@@ -79,7 +105,8 @@ path {
   svg {
     margin: auto;
   }
-  #sentence {
+  .sentence-container {
+    position: relative;
     max-width: 350px;
     text-align: center;
     margin: auto;

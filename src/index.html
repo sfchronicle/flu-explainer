@@ -8,9 +8,12 @@
 <% json.flu_season.story.forEach(function(story){ %>
 
   <div class="interactive-hed"><%=story.Headline%></div>
-  <% story.text.forEach(function(d,didx){ %>
-    <p><%=d.value %></p>
-  <% }); %>
+
+  <% if (story.Intro) { %>
+    <div class="intro">
+      <p><%=story.Intro %></p>
+    </div>
+  <% } %>
 
   <% if (story.Interactive == "bad-year-for-the-flu") { %>
     <div class="interactive-chart" id="bad-year-for-the-flu"></div>
@@ -29,7 +32,16 @@
     <div class="interactive-chart" id="evolution-of-strains"></div>
   <% } else if (story.Interactive == "who-gets-the-vaccine") { %>
     <div class="interactive-chart statement-chart">
-      <div id="sentence"></div>
+      <div class="sentence-container">
+        <div id="sentence"></div>
+        <ul class="progressbar">
+            <li class="li active" id="li0"></li>
+            <li class="li" id="li1"></li>
+            <li class="li" id="li2"></li>
+            <li class="li" id="li3"></li>
+            <li class="li" id="li4"></li>
+        </ul>
+      </div>
       <div id="who-gets-the-vaccine"></div>
     </div>
   <% } else if (story.Interactive == "efficacy-by-age") { %>
@@ -45,6 +57,10 @@
     <div class="interactive-chart" id="other-efficacy"></div>
   <% } %>
 
+  <% story.text.forEach(function(d,didx){ %>
+    <p><%=d.value %></p>
+  <% }); %>
+
 <% }) %>
 
 <script>
@@ -55,5 +71,5 @@
   var efficacyOther = <%= JSON.stringify(json.OtherEfficacyTransposed) %>;
 </script>
 
-<script src="app.js" async></script>
+<script src="app.js?4" async></script>
 <%= t.include("partials/_footer.html") %>
