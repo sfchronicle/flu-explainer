@@ -18,12 +18,12 @@ path {
 @age50yr: #9e9ac8;
 @age65yr: #bcbddc;
 
-.interactive-chart {
-  padding: 0 0 50px 0;
-  @media @mobile {
-    padding: 0 0 30px 0;
-  }
-}
+// .interactive-chart {
+//   padding: 0 0 50px 0;
+//   @media @mobile {
+//     padding: 0 0 30px 0;
+//   }
+// }
 
 .progressbar {
   max-width: 140px;
@@ -32,6 +32,12 @@ path {
   bottom: -40px;
   position: absolute;
   left: 0; right: 0;
+  @media @mobile {
+    position: relative;
+    clear: both;
+    bottom: auto;
+    padding-top: 10px;
+  }
   li {
     // display: inline-block;
     list-style: circle;
@@ -43,11 +49,40 @@ path {
     &.active {
       list-style: disc;
     }
+    @media @mobile {
+      width: 10px;
+    }
+  }
+}
+
+.source, .about-the-data {
+  max-width: 800px;
+  margin: auto;
+  font-family: @med-graphics;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.4;
+  @media @tablet {
+    padding: 0 10px;
+  }
+}
+
+.about-the-data {
+  padding-bottom: 10px;
+}
+
+.source {
+  padding-bottom: 50px;
+  @media @mobile {
+    padding-bottom: 30px;
   }
 }
 
 .intro {
   padding-top: 30px;
+  @media @mobile {
+    padding-top: 0;
+  }
 }
 
 .interactive-hed {
@@ -92,6 +127,7 @@ path {
   margin-top: 30px;
   margin-bottom: 50px;
   @media @mobile {
+    margin-top: 0;
     margin-bottom: 30px;
     width: 80%;
   }

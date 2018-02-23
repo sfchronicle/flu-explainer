@@ -57,6 +57,13 @@
     <div class="interactive-chart" id="other-efficacy"></div>
   <% } %>
 
+  <% if (story.AboutTheData){ %>
+    <div class="about-the-data">About the data: <%=story.AboutTheData%></div>
+  <% } %>
+  <% if (story.Source){ %>
+    <div class="source">Source: <%=story.Source%></div>
+  <% } %>
+
   <% story.text.forEach(function(d,didx){ %>
     <p><%=d.value %></p>
   <% }); %>
@@ -71,5 +78,5 @@
   var efficacyOther = <%= JSON.stringify(json.OtherEfficacyTransposed) %>;
 </script>
 
-<script src="app.js?4" async></script>
+<script src="app.js?5" async></script>
 <%= t.include("partials/_footer.html") %>

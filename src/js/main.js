@@ -7,11 +7,13 @@ console.log(windowWidth);
 
 var formatthousands = d3.format(",");
 
+$('a[href^="http"]').not('a[href*=gusdecool]').attr('target','_blank');
+
 // setting sizes of interactive
 var margin = {
   top: 15,
   right: 50,
-  bottom: 50,
+  bottom: 80,
   left: 70
 };
 if (screen.width <= 480 && screen.width > 340) {
@@ -19,7 +21,7 @@ if (screen.width <= 480 && screen.width > 340) {
   var margin = {
     top: 20,
     right: 10,
-    bottom: 40,
+    bottom: 60,
     left: 30
   };
 } else if (screen.width <= 340) {
@@ -27,7 +29,7 @@ if (screen.width <= 480 && screen.width > 340) {
   var margin = {
     top: 20,
     right: 10,
-    bottom: 40,
+    bottom: 60,
     left: 30
   };
 }
@@ -46,6 +48,10 @@ dataNested.forEach(function(d) {
         return d3.ascending(+a.ConsecWeek, +b.ConsecWeek)
     });
 });
+
+var weeknums = [];
+for (var i = 40; i <= 52; i++) { weeknums.push(i);}
+for (var i = 1; i <= 39; i++) { weeknums.push(i);}
 
 function hoverChart(targetID) {
 
@@ -91,7 +97,9 @@ function hoverChart(targetID) {
   // Define the axes
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x))
+      .call(d3.axisBottom(x)
+        .ticks(10)
+        .tickFormat(function(d,i){return weeknums[5*(i+1)];}))
       .append("text")
         .attr("class", "label")
         .attr("x", width)
@@ -150,7 +158,7 @@ function hoverChart(targetID) {
           }
         })
         .style("stroke-width",function(){
-          if (d.key.substring(0,4) == 2017){
+          if ((d.key.substring(0,4) == 2017) || (d.key.substring(0,4) == 2009)) {
             return 5;
           } else {
             return 2;
@@ -296,7 +304,9 @@ function animatedBarChart(targetID) {
   // Define the axes
   svgBars.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xBars).ticks(0))
+      .call(d3.axisBottom(xBars)
+        .ticks(19)
+        .tickFormat(function(d,i){return weeknums[i];}))
       .append("text")
         .attr("class", "label")
         .attr("x", width)
@@ -355,7 +365,7 @@ function animatedBarChart(targetID) {
         })
         .on("mouseover", function(d) {
           bars_tooltip.html(`
-            <div>Week <b>${d.WeekNum}</b></div>
+            <div>Week <b>${d.WEEK}</b></div>
             <div><b>${formatthousands(d.AH3)}</b> cases of the A (H3) strain</div>
             <div><b>${formatthousands(d.AH1N1)}</b> cases of the A (2009 H1N1) strain</div>
             <div><b>${formatthousands(d.Bsum)}</b> cases of the B strains</div>
@@ -396,14 +406,15 @@ function regularBarChart(targetID) {
   // margin.bottom = 140;
   margin.top = 40;
   if (screen.width > 480) {
+    margin.bottom = 70;
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
-    margin.bottom = 120;
+    margin.bottom = 130;
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 340) {
     console.log("mini iphone")
-    margin.bottom = 120;
+    margin.bottom = 130;
     var height = 370 - margin.top - margin.bottom;
   }
   var width = Math.min(windowWidth,700) - 10 - margin.left - margin.right;
@@ -522,9 +533,9 @@ function regularBarChartV2(targetID,data,percent) {
 
   // create SVG container for chart components
   if (screen.width <= 480){
-    margin.bottom = 130;
+    margin.bottom = 140;
   } else {
-    margin.bottom = 180;
+    margin.bottom = 150;
   }
   if (screen.width > 480) {
     var height = 630 - margin.top - margin.bottom;
@@ -542,10 +553,10 @@ function regularBarChartV2(targetID,data,percent) {
     } else {
       margin.right = 10;
     }
-  } else {
-    if (screen.width <= 480){
-      margin.left = 30;
-    }
+  }
+  if (screen.width <= 480){
+    console.log("here");
+    margin.left = 30;
   }
   if (windowWidth > 1000){
     maxWidth_new = 1000*percent;
@@ -803,10 +814,15 @@ function dotChart(targetID){
 }
 
 var initialVar = 0;
+if (screen.width <= 480){
+  offsetvar = 400;
+} else {
+  offsetvar = 500;
+}
 $(window).scroll(function(){
   if (initialVar == 0){
     var pos = $(this).scrollTop();
-    var top_pos = $("#sentence").offset().top-300;
+    var top_pos = $("#sentence").offset().top-offsetvar;
     if (pos > top_pos){
       dotChart("#who-gets-the-vaccine");
       initialVar = 1;
@@ -844,7 +860,7 @@ function groupedBars(targetID){
   margin.left = 50;
   margin.right = 20;
   if (screen.width <= 480){
-    margin.bottom = 160;
+    margin.bottom = 170;
   }
   var width = Math.min(windowWidth,maxWidth) - 10 - margin.left - margin.right;
   var svgGroupedBars = d3.select(targetID).append("svg")
