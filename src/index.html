@@ -29,7 +29,7 @@
       <div class="element"><div class="swath bstrains"><div class="legend-text">B strains</div></div></div>
       <div class="element"><div class="swath other"><div class="legend-text">Other strains</div></div></div>
     </div>
-    <div class="button" id="click-to-see-strains"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Click to animate the chart.</div>
+    <div class="button" id="click-to-see-strains"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Unstack the bars.</div>
     <div class="interactive-chart" id="evolution-of-strains"></div>
   <% } else if (story.Interactive == "who-gets-the-vaccine") { %>
     <div class="interactive-chart statement-chart">
@@ -70,13 +70,16 @@
 
 <% }) %>
 
+<div class="interactive-chart"><div id="deaths"></div></div>
+
 <script>
   var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;
   var fluStrainsThisYear = <%= JSON.stringify(json.EvolutionOfStrainsThisYear) %>;
   var efficacyByAge = <%= JSON.stringify(json.EfficacyByAge) %>;
   var efficacyByVaccine = <%= JSON.stringify(json.FluVaccineVsOtherVaccines) %>;
   var efficacyOther = <%= JSON.stringify(json.OtherEfficacyTransposed) %>;
+  var deaths = <%= JSON.stringify(json.CADeaths) %>;
 </script>
 
-<script src="app.js?6" async></script>
+<script src="app.js?7" async></script>
 <%= t.include("partials/_footer.html") %>

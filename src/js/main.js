@@ -1068,6 +1068,135 @@ function groupedBars(targetID){
 
 groupedBars("#other-efficacy");
 
+function deathsBarChart(targetID) {
+
+  d3.select(targetID).select("svg").remove();
+
+  // show tooltip
+  var deaths_tooltip = d3.select("body")
+      .append("div")
+      .attr("class","deaths_tooltip")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("display", "none")
+
+  // create SVG container for chart components
+  // margin.bottom = 140;
+  margin.top = 40;
+  margin.bottom = 110;
+  if (screen.width > 480) {
+    var height = 450 - margin.top - margin.bottom;
+  } else if (screen.width <= 480 && screen.width > 340) {
+    console.log("big phone");
+    // margin.bottom = 120;
+    var height = 450 - margin.top - margin.bottom;
+  } else if (screen.width <= 340) {
+    console.log("mini iphone")
+    // margin.bottom = 120;
+    var height = 370 - margin.top - margin.bottom;
+  }
+  var width = Math.min(windowWidth,700) - 10 - margin.left - margin.right;
+  var svgD = d3.select(targetID).append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var xBarsD = d3.scaleBand()
+    .domain(deaths.map(function(d) { return d.Week; }))
+    .rangeRound([0, width])
+    .padding(0.2);
+
+  var yBarsD = d3.scaleLinear()
+    .domain([0, 50])
+    .range([height, 0]);
+
+  // Define the axes
+  // if (screen.width <= 480){
+    svgD.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xBarsD))
+          .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)" )
+        .append("text")
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", 40)
+          .attr("fill","black")
+          .style("text-anchor", "end")
+          .text("Week")
+  // } else {
+  //   svgD.append("g")
+  //       .attr("transform", "translate(0," + height + ")")
+  //       .call(d3.axisBottom(xBarsD))
+  //         // .selectAll("text")
+  //         //   .style("text-anchor", "end")
+  //         //   .attr("dx", "-.8em")
+  //         //   .attr("dy", "-.55em")
+  //         //   .attr("transform", "rotate(-65)" )
+  //       .append("text")
+  //         .attr("class", "label")
+  //         .attr("x", width)
+  //         .attr("y", 40)
+  //         .attr("fill","black")
+  //         .style("text-anchor", "end")
+  //         .text("Week")
+  // }
+
+  svgD.append("g")
+      .call(d3.axisLeft(yBarsD))
+      .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 20)
+        .attr("x", 0)
+        .attr("fill","black")
+        .style("text-anchor", "end")
+        .text("Number of deaths")
+
+    // all strains, summed
+    svgD.selectAll("bar")
+        .data(deaths)
+      .enter().append("rect")
+        .style("fill", function(){
+          return "#3182bd";
+        })
+        .attr("x", function(d) {
+          return xBarsD(d.Week);
+        })
+        .attr("width", xBarsD.bandwidth())
+        .attr("y", function(d) {
+          return yBarsD(+d.Deaths);
+        })
+        .attr("height", function(d) {
+          return height - yBarsD(+d.Deaths);
+        })
+        .on("mouseover", function(d) {
+          deaths_tooltip.html(`
+            <div><b>${d.Week}</b></div>
+            <div><b>${d.Deaths}</b> deaths</div>
+          `);
+          deaths_tooltip.style("display", "block");
+        })
+        .on("mousemove", function(d) {
+          if (screen.width <= 480) {
+            return deaths_tooltip
+              .style("top", (d3.event.pageY+20)+"px")
+              .style("left",d3.event.pageX/2+20+"px");
+          } else {
+            return deaths_tooltip
+              .style("top", (d3.event.pageY+20)+"px")
+              .style("left",(d3.event.pageX-80)+"px");
+          }
+        })
+        .on("mouseout", function(){return deaths_tooltip.style("display", "none");});
+}
+
+deathsBarChart("#deaths");
+
 $(window).resize(function () {
   windowWidth = $(window).width();
 
@@ -1078,5 +1207,6 @@ $(window).resize(function () {
   regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
   dotChart("#who-gets-the-vaccine");
   groupedBars("#other-efficacy");
+  deathsBarChart("#deaths");
 
 });
