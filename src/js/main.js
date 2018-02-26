@@ -57,6 +57,10 @@ function hoverChart(targetID) {
 
   d3.select(targetID).select("svg").remove();
 
+  if (screen.width <= 480) {
+    margin.bottom = 60;
+  }
+
   // create SVG container for chart components
   if (screen.width > 1400){
     var height = 700 - margin.top - margin.bottom;
@@ -183,6 +187,7 @@ function hoverChart(targetID) {
 
     var focus = svg.append("g")
         .attr("transform", "translate(-100,-100)")
+        .style("visibility","hidden")
         .attr("class", "focus");
 
     focus.append("circle")
@@ -213,11 +218,13 @@ function hoverChart(targetID) {
       focus.attr("transform", "translate(" + x(d.data["ConsecWeek"]) + "," + y(d.data["PercentVisits"]) + ")");
       focus.select("#text1").text(function(){ return d.data["FluYear"]});
       focus.select("#text2").text(function(){ return Math.round(d.data["PercentVisits"]*10)/10+ "%"});
+      focus.style("visibility","visible");
     }
 
     function mouseout(d) {
       d3.select(".id"+d.data["FluYear"]).classed("line-hover", false);
       focus.attr("transform", "translate(-100,-100)");
+      focus.style("visibility","hidden");
       focus.select("text").text("");
     }
 
@@ -849,7 +856,7 @@ function dotChart(targetID){
 
     // transition
     var t = d3.transition()
-        .duration(750);
+        .duration(500);
 
     // hierarchy
     var h = d3.hierarchy({children: data})
@@ -922,22 +929,7 @@ function dotChart(targetID){
 
 }
 
-var initialVar = 0;
-if (screen.width <= 480){
-  offsetvar = 600;
-} else {
-  offsetvar = 1000;
-}
-$(window).scroll(function(){
-  if (initialVar == 0){
-    var pos = $(this).scrollTop();
-    var top_pos = $("#sentence").offset().top-offsetvar;
-    if (pos > top_pos){
-      dotChart("#who-gets-the-vaccine");
-      initialVar = 1;
-    }
-  }
-});
+dotChart("#who-gets-the-vaccine");
 
 function groupedBars(targetID){
   d3.select(targetID).selectAll("svg").remove();
@@ -1205,16 +1197,16 @@ deathsBarChart("#deaths");
 
 $(window).resize(function () {
   windowWidth = $(window).width();
+  console.log("reload!");
 
   hoverChart("#bad-year-for-the-flu");
-  animatedBarChart("#evolution-of-strains");
+  // animatedBarChart("#evolution-of-strains");
   regularBarChart("#efficacy-by-age");
   regularBarChartV2("#efficacy-by-vaccine-influenza",flu_efficacy, 0.63);
   regularBarChartV2("#efficacy-by-vaccine-others",other_efficacy, 0.36);
-  dotChart("#who-gets-the-vaccine");
   groupedBars("#other-efficacy");
   deathsBarChart("#deaths");
 
-  $("#click-to-see-strains").removeClass("active");
+  // $("#click-to-see-strains").removeClass("active");
 
 });
