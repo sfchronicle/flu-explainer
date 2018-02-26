@@ -29,7 +29,7 @@
       <div class="element"><div class="swath bstrains"><div class="legend-text">B strains</div></div></div>
       <div class="element"><div class="swath other"><div class="legend-text">Other strains</div></div></div>
     </div>
-    <div class="button" id="click-to-see-strains"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Unstack the bars.</div>
+    <div class="button" id="click-to-see-strains"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Click to see trends for individual strains.</div>
     <div class="interactive-chart" id="evolution-of-strains"></div>
   <% } else if (story.Interactive == "who-gets-the-vaccine") { %>
     <div class="interactive-chart statement-chart">
@@ -46,6 +46,8 @@
     </div>
   <% } else if (story.Interactive == "efficacy-by-age") { %>
     <div class="interactive-chart" id="efficacy-by-age"></div>
+  <% } else if (story.Interactive == "ca-deaths") { %>
+    <div class="interactive-chart"><div id="deaths"></div></div>
   <% } else if (story.Interactive == "other-efficacy") { %>
     <div class="legend-container">
       <div class="element short"><div class="swath age6mo"><div class="legend-text">6 months - 4 years</div></div></div>
@@ -70,7 +72,10 @@
 
 <% }) %>
 
-<div class="interactive-chart"><div id="deaths"></div></div>
+<div class="closing-bylines">
+  <p>Erin Allday is the San Francisco Chronicle health reporter. Email: <a href="mailto:eallday@sfchronicle.com">eallday@sfchronicle.com</a> Twitter: <a href="https://twitter.com/erinallday">@erinallday</a>.</p>
+  <p>Emma O'Neill is a San Francisco Chronicle interactive producer. Email: <a href="mailto:eoneill@sfchronicle.com">eoneill@sfchronicle.com</a> Twitter: <a href="https://twitter.com/emmaruthoneill">@emmaruthoneill</a>.</p>
+</div>
 
 <script>
   var fluHistoricalData = <%= JSON.stringify(json.HistoricalDataFlu_Erin) %>;
@@ -81,5 +86,5 @@
   var deaths = <%= JSON.stringify(json.CADeaths) %>;
 </script>
 
-<script src="app.js?7" async></script>
+<script src="app.js?10" async></script>
 <%= t.include("partials/_footer.html") %>

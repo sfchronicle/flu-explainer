@@ -407,9 +407,11 @@ function animatedBarChart(targetID) {
   document.getElementById("click-to-see-strains").addEventListener("click", function(e) {
     if (toggle == "stacked"){
       transitionGrouped();
+      $("#click-to-see-strains").addClass("active");
       toggle = "grouped";
     } else {
       transitionStacked();
+      $("#click-to-see-strains").removeClass("active");
       toggle = "stacked";
     }
   });
@@ -812,10 +814,10 @@ function dotChart(targetID){
   demographicData.push([{name:"White",size: 52},{name:"Black",size: 40},{name:"Hispanic",size:41},{name:"Other",size:50}]);
 
   var sentenceData = [];
-  sentenceData.push("Overall, <span class='highlight'>50%</span> of Americans get the flu vaccine each year.");
-  sentenceData.push("That is <span class='highlight'>46%</span> of men and <span class='highlight'>52%</span> of women.");
-  sentenceData.push("Older Americans are significantly more likely to get vaccinated. Teenagers are the least likely.");
-  sentenceData.push("White Americans are more likely to be vaccinated than black or hispanic Americans.")
+  sentenceData.push("Half of Americans get the flu vaccine each year.");
+  sentenceData.push("About <span class='highlight'>46%</span> of men get vaccinated, and <span class='highlight'>52%</span> of women.");
+  sentenceData.push("About <span class='highlight'>76%</span> of people age 65 and older get vaccinated – far more than any other age group.");
+  sentenceData.push("But only about <span class='highlight'>40%</span> of black and Hispanic people get vaccinated, compared to <span class='highlight'>52%</span> of white people.")
   var i = 0;
 
   var updateInfo = function(sentence) {
@@ -1083,15 +1085,17 @@ function deathsBarChart(targetID) {
   // create SVG container for chart components
   // margin.bottom = 140;
   margin.top = 40;
-  margin.bottom = 110;
+  margin.bottom = 120;
   if (screen.width > 480) {
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 480 && screen.width > 340) {
     console.log("big phone");
+    margin.top = 20;
     // margin.bottom = 120;
     var height = 450 - margin.top - margin.bottom;
   } else if (screen.width <= 340) {
-    console.log("mini iphone")
+    console.log("mini iphone");
+    margin.top = 20;
     // margin.bottom = 120;
     var height = 370 - margin.top - margin.bottom;
   }
@@ -1208,5 +1212,7 @@ $(window).resize(function () {
   dotChart("#who-gets-the-vaccine");
   groupedBars("#other-efficacy");
   deathsBarChart("#deaths");
+
+  $("#click-to-see-strains").removeClass("active");
 
 });
