@@ -393,7 +393,13 @@ function animatedBarChart(targetID) {
           if (screen.width <= 480) {
             return bars_tooltip
               .style("top", (d3.event.pageY+20)+"px")
-              .style("left",d3.event.pageX/2+20+"px");
+              .style("left",function(){
+                if (d3.event.pageX > 200){
+                  return (d3.event.pageX-180)+"px";
+                } else {
+                  return (d3.event.pageX-20)+"px";
+                }
+              });
           } else {
             return bars_tooltip
               .style("top", (d3.event.pageY+20)+"px")
@@ -560,11 +566,6 @@ function regularBarChart(targetID) {
     svgBars.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xBarsReg))
-          // .selectAll("text")
-          //   .style("text-anchor", "end")
-          //   .attr("dx", "-.8em")
-          //   .attr("dy", "-.55em")
-          //   .attr("transform", "rotate(-65)" )
         .append("text")
           .attr("class", "label")
           .attr("x", width)
@@ -613,7 +614,13 @@ function regularBarChart(targetID) {
           if (screen.width <= 480) {
             return regbars_tooltip
               .style("top", (d3.event.pageY+20)+"px")
-              .style("left",d3.event.pageX/2+20+"px");
+              .style("left",function(){
+                if (d3.event.pageX > 250){
+                  return (d3.event.pageX-80)+"px";
+                } else {
+                  return (d3.event.pageX-20)+"px";
+                }
+              });
           } else {
             return regbars_tooltip
               .style("top", (d3.event.pageY+20)+"px")
@@ -750,13 +757,13 @@ function regularBarChartV2(targetID,data,percent) {
           if (d.Note){
             regbars2_tooltip.html(`
               <div><b>${d.Vaccine}</b> Vaccine</div>
-              <div><b>${d.Effectiveness}</b>% effective</div>
-              <div><b>${d.Note}</b></div>
+              <div><b>${d.Effectiveness}%</b> effective</div>
+              <div>${d.Note}</div>
             `);
           } else {
             regbars2_tooltip.html(`
               <div><b>${d.Vaccine}</b> Vaccine</div>
-              <div><b>${d.Effectiveness}</b>% effective</div>
+              <div><b>${d.Effectiveness}%</b> effective</div>
             `);
           }
           regbars2_tooltip.style("display", "block");
@@ -917,9 +924,9 @@ function dotChart(targetID){
 
 var initialVar = 0;
 if (screen.width <= 480){
-  offsetvar = 400;
+  offsetvar = 600;
 } else {
-  offsetvar = 500;
+  offsetvar = 1000;
 }
 $(window).scroll(function(){
   if (initialVar == 0){
@@ -1050,7 +1057,7 @@ function groupedBars(targetID){
       .on("mouseover", function(d) {
         groupedbars_tooltip.html(`
           <div><b>Age: ${d.Age}</b></div>
-          <div><b>${formatthousands(d.Count)} ${d.Averted.toLowerCase()}</b></div>
+          <div><b>${formatthousands(d.Count)}</b> ${d.Averted.toLowerCase()}</div>
         `);
         groupedbars_tooltip.style("display", "block");
       })
@@ -1058,7 +1065,13 @@ function groupedBars(targetID){
         if (screen.width <= 480) {
           return groupedbars_tooltip
             .style("top", (d3.event.pageY+20)+"px")
-            .style("left",d3.event.pageX/2+20+"px");
+            .style("left",function(){
+              if (d3.event.pageX > 250){
+                return (d3.event.pageX-100)+"px";
+              } else {
+                return (d3.event.pageX-20)+"px";
+              }
+            });
         } else {
           return groupedbars_tooltip
             .style("top", (d3.event.pageY+20)+"px")
@@ -1116,39 +1129,22 @@ function deathsBarChart(targetID) {
     .range([height, 0]);
 
   // Define the axes
-  // if (screen.width <= 480){
-    svgD.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xBarsD))
-          .selectAll("text")
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", "-.55em")
-            .attr("transform", "rotate(-90)" )
-        .append("text")
-          .attr("class", "label")
-          .attr("x", width)
-          .attr("y", 40)
-          .attr("fill","black")
+  svgD.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xBarsD))
+        .selectAll("text")
           .style("text-anchor", "end")
-          .text("Week")
-  // } else {
-  //   svgD.append("g")
-  //       .attr("transform", "translate(0," + height + ")")
-  //       .call(d3.axisBottom(xBarsD))
-  //         // .selectAll("text")
-  //         //   .style("text-anchor", "end")
-  //         //   .attr("dx", "-.8em")
-  //         //   .attr("dy", "-.55em")
-  //         //   .attr("transform", "rotate(-65)" )
-  //       .append("text")
-  //         .attr("class", "label")
-  //         .attr("x", width)
-  //         .attr("y", 40)
-  //         .attr("fill","black")
-  //         .style("text-anchor", "end")
-  //         .text("Week")
-  // }
+          .attr("dx", "-.8em")
+          .attr("dy", "-.55em")
+          .attr("transform", "rotate(-90)" )
+      .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 40)
+        .attr("fill","black")
+        .style("text-anchor", "end")
+        .text("Week")
+
 
   svgD.append("g")
       .call(d3.axisLeft(yBarsD))
@@ -1189,7 +1185,13 @@ function deathsBarChart(targetID) {
           if (screen.width <= 480) {
             return deaths_tooltip
               .style("top", (d3.event.pageY+20)+"px")
-              .style("left",d3.event.pageX/2+20+"px");
+              .style("left",function(){
+                if (d3.event.pageX > 250){
+                  return (d3.event.pageX-80)+"px";
+                } else {
+                  return (d3.event.pageX-20)+"px";
+                }
+              });
           } else {
             return deaths_tooltip
               .style("top", (d3.event.pageY+20)+"px")
