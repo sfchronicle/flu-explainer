@@ -23,15 +23,13 @@
       <div id="efficacy-by-vaccine-others"></div>
     </div>
   <% } else if (story.Interactive == "evolution-of-strains") { %>
-    <div class="interactive-hed" id="test-hed0">This flu season has been especially bad because the dominant strain was a Type A that’s very aggressive.</div>
-    <div class="interactive-hed" id="test-hed1">But in recent weeks Type A has been going away and Type B is surging. The good news is B isn’t as severe, and the vaccine works better against it.</div>
     <div class="legend-container">
       <div class="element"><div class="swath ah3"><div class="legend-text">A (H3) strain</div></div></div>
       <div class="element"><div class="swath ah1n1"><div class="legend-text">A (2009 H1N1) strain</div></div></div>
       <div class="element"><div class="swath bstrains"><div class="legend-text">B strains</div></div></div>
       <div class="element"><div class="swath other"><div class="legend-text">Other strains</div></div></div>
     </div>
-    <!-- <div class="button" id="click-to-see-strains"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Click to see trends for individual strains.</div> -->
+    <div class="button" id="click-to-see-strains"><i class="fa fa-hand-o-right" aria-hidden="true"></i> Click to see trends for individual strains.</div>
     <div class="interactive-chart" id="evolution-of-strains"></div>
   <% } else if (story.Interactive == "who-gets-the-vaccine") { %>
     <div class="interactive-chart statement-chart">
