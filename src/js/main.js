@@ -7,7 +7,7 @@ console.log(windowWidth);
 
 var formatthousands = d3.format(",");
 
-$('a[href^="http"]').not('a[href*=gusdecool]').attr('target','_blank');
+$('a[href^="http"]').attr('target','_blank');
 
 // setting sizes of interactive
 var margin = {
@@ -415,6 +415,19 @@ function animatedBarChart(targetID) {
         })
         .on("mouseout", function(){return bars_tooltip.style("display", "none");});
   }
+
+  // $("#test-hed1").fadeOut(0);
+  // var timeout = setTimeout(function() {
+  //   $("#test-hed0").fadeOut(0);
+  //   $("#test-hed1").fadeIn(400);
+  //   transitionGrouped();
+  // }, 3000);
+  //
+  // var timeout = setTimeout(function() {
+  //   $("#test-hed1").fadeOut(0);
+  //   $("#test-hed0").fadeIn(400);
+  //   transitionStacked();
+  // }, 6000);
 
   var toggle = "stacked";
   document.getElementById("click-to-see-strains").addEventListener("click", function(e) {
@@ -847,7 +860,11 @@ function dotChart(targetID){
       document.querySelector("#li"+li_idx).classList.add("active");
     }
     i = (i + 1) % demographicData.length;
-    loop = setTimeout(tick, i == 0 ? 8000 : 4000);
+    if (i > 2){
+      loop = setTimeout(tick, i == 0 ? 12000 : 6000);
+    } else {
+      loop = setTimeout(tick, i == 0 ? 6000 : 3000);
+    }
   };
 
   tick();
@@ -1022,7 +1039,7 @@ function groupedBars(targetID){
         .attr("x", 0)
         .attr("fill","black")
         .style("text-anchor", "end")
-        .text("Number of cases (M)")
+        .text("Millions of cases")
 
   svgGroupedBars.selectAll(".bar")
       .data(efficacyOther)
