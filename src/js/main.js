@@ -860,10 +860,10 @@ function dotChart(targetID){
       document.querySelector("#li"+li_idx).classList.add("active");
     }
     i = (i + 1) % demographicData.length;
-    if (i > 2){
-      loop = setTimeout(tick, i == 0 ? 12000 : 6000);
+    if (i > 0 && i <= 2){
+      loop = setTimeout(tick, 3000);
     } else {
-      loop = setTimeout(tick, i == 0 ? 6000 : 3000);
+      loop = setTimeout(tick, 6000);
     }
   };
 
